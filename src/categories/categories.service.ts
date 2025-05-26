@@ -37,24 +37,37 @@ export class CategoriesService {
 
   async findCategoryBySlug(
     slug: string,
-    parentSlug: string,
+    parentSlug?: string,
   ): Promise<Category> {
-    const parentCategory = await this.categoriesRepository.findOne({
-      where: { name: parentSlug },
-    });
-    console.log(parentCategory);
-    if (!parentCategory) {
-      throw new NotFoundException('parentCategory not found');
-    }
+    if (parentSlug) {
+      const parentCategory = await this.categoriesRepository.findOne({
+        where: { slug: parentSlug },
+      });
 
-    const category = await this.categoriesRepository.findOne({
-      where: { name: slug, parent_id: parentCategory.id },
-    });
+      if (!parentCategory) {
+        throw new NotFoundException('parentCategory not found');
+      }
 
-    if (!category) {
-      throw new NotFoundException('Category not found');
+      const category = await this.categoriesRepository.findOne({
+        where: { slug: slug, parent_id: parentCategory.id },
+      });
+
+      if (!category) {
+        throw new NotFoundException('Category not found with specified parent');
+      }
+
+      return category;
+    } else {
+      const category = await this.categoriesRepository.findOne({
+        where: { slug: slug },
+      });
+
+      if (!category) {
+        throw new NotFoundException('Category not found without parent');
+      }
+
+      return category;
     }
-    return category;
   }
 
   async findCategoryByParent(id: number): Promise<Category[]> {

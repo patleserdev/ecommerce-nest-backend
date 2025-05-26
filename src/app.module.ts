@@ -13,6 +13,8 @@ import { json } from 'body-parser';
 import { Request } from 'express';
 import { InvoicesModule } from './invoices/invoices.module';
 import { CartModule } from './cart/cart.module';
+import { ProductVariationsModule } from './product-variations/product-variations.module';
+import { BrandsModule } from './brands/brands.module';
 
 @Module({
   imports: [
@@ -25,7 +27,8 @@ import { CartModule } from './cart/cart.module';
       database: 'nest_ecommerce', // crée cette base ou change le nom
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       autoLoadEntities: true,
-      synchronize: true, // ⚠️ à désactiver en prod
+      synchronize: false, // ⚠️ à désactiver en prod
+      migrationsRun: true,
       logging: true,
       logger: 'advanced-console',
     }),
@@ -37,6 +40,8 @@ import { CartModule } from './cart/cart.module';
     PaymentsModule,
     InvoicesModule,
     CartModule,
+    ProductVariationsModule,
+    BrandsModule,
   ],
   controllers: [AppController],
   providers: [AppService, PaymentsService],

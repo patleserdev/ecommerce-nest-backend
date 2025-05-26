@@ -6,11 +6,12 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
-import { ApiTags, ApiOperation, ApiBody } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBody, ApiQuery } from '@nestjs/swagger';
 
 @ApiTags('categories')
 @Controller('categories')
@@ -38,14 +39,19 @@ export class CategoriesController {
     return this.categoriesService.findCategoryById(id);
   }
 
-  @Get('/slug/:slug/:parentslug')
-  @ApiOperation({ summary: 'Récupérer catégorie par slug' })
+  @Get('/slug/:slug')
+  @ApiOperation({ summary: 'Récupérer catégorie par slug du parent' })
+  @ApiQuery({
+    name: 'parent',
+    required: false,
+    description: 'Slug du parent (facultatif)',
+  })
   @ApiBody({ type: CreateCategoryDto })
   findCategoryBySlug(
     @Param('slug') slug: string,
-    @Param('parentslug') parentSlug: string,
+    @Query('parent') parentSlug?: string,
   ) {
-    console.log('slug', slug, 'parentSlug', parentSlug);
+    // console.log('slug', slug, 'parentSlug', parentSlug);
     return this.categoriesService.findCategoryBySlug(slug, parentSlug);
   }
 

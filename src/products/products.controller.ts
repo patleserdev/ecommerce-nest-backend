@@ -13,7 +13,7 @@ import { UpdateProductDto } from '../products/dto/update-product.dto';
 // import { CreateCategoryDto } from '../categories/dto/create-category.dto';
 // import { UpdateCategoryDto } from '../categories/dto/update-category.dto';
 import { ApiTags, ApiOperation, ApiBody } from '@nestjs/swagger';
-
+import { Product } from '../products/entities/product.entity';
 @ApiTags('products')
 @Controller('products')
 export class ProductsController {
@@ -37,6 +37,13 @@ export class ProductsController {
   @ApiBody({ type: CreateProductDto })
   findProductById(@Param('id') id: number) {
     return this.productsService.findProductById(id);
+  }
+
+  @Get('/slug/:slug')
+  @ApiOperation({ summary: 'récupérer un produit par son slug' })
+  @ApiBody({ type: Product })
+  findBySlug(@Param('slug') slug: string): Promise<Product> {
+    return this.productsService.findBySlug(slug);
   }
 
   @Get('/categories/:id')

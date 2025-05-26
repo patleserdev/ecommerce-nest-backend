@@ -18,7 +18,7 @@ export class CreateProductDto {
   description: string;
 
   @ApiProperty({
-    example: '35',
+    example: 35,
     description: 'prix du produit',
   })
   @IsNotEmpty()
@@ -34,7 +34,7 @@ export class CreateProductDto {
   sku: string;
 
   @ApiProperty({
-    example: '10',
+    example: 10,
     description: 'quantité disponible du produit',
   })
   @IsNotEmpty()
@@ -42,7 +42,7 @@ export class CreateProductDto {
   quantity: number;
 
   @ApiProperty({
-    example: 'chapeaux',
+    example: 10,
     description: 'catégorie du produit',
   })
   @IsNotEmpty()

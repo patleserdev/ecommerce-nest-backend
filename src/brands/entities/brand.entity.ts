@@ -11,21 +11,17 @@ import { Product } from '../../products/entities/product.entity';
 import slugify from 'slugify';
 
 @Entity()
-export class Category {
+export class Brand {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   name: string;
 
-  @Unique(['slug'])
-  @Column({ unique: true })
+  @Column()
   slug: string;
 
-  @Column()
-  parent_id: number;
-
-  @OneToMany(() => Product, (product) => product.category)
+  @OneToMany(() => Product, (product) => product.brand)
   products: Product[];
 
   @BeforeInsert()

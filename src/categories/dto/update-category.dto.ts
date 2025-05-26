@@ -1,6 +1,6 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateCategoryDto } from './create-category.dto';
-import { IsOptional, IsString, IsNumber } from 'class-validator';
+import { IsNotEmpty, IsString, IsNumber } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateCategoryDto extends PartialType(CreateCategoryDto) {
@@ -15,7 +15,7 @@ export class UpdateCategoryDto extends PartialType(CreateCategoryDto) {
     example: 'politique',
     description: 'nom de la catégorie',
   })
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   name?: string;
 }

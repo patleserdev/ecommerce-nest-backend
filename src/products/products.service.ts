@@ -30,13 +30,15 @@ export class ProductsService {
   }
 
   async findAllProducts(): Promise<Product[]> {
-    return this.productsRepository.find({ relations: ['category'] });
+    return this.productsRepository.find({
+      relations: ['category', 'variations'],
+    });
   }
 
   async findProductById(id: number): Promise<Product> {
     const product = await this.productsRepository.findOne({
       where: { id },
-      relations: ['category'],
+      relations: ['category', 'variations'],
     });
     if (!product) {
       throw new NotFoundException('Product not found');
@@ -44,11 +46,27 @@ export class ProductsService {
     return product;
   }
 
+  async findBySlug(slug: string): Promise<Product> {
+    const product = await this.productsRepository.findOne({
+      where: { slug },
+      relations: ['category', 'variations'],
+    });
+
+    if (!product) {
+      throw new NotFoundException(
+        `Aucun produit trouvé avec le slug "${slug}"`,
+      );
+    }
+
+    console.log('product', product);
+    return product;
+  }
+
   async findProductBycategoryId(categoryId: number): Promise<Product[]> {
     const products = await this.productsRepository.find({
       order: { name: 'ASC' },
       where: { category: { id: categoryId } },
-      relations: ['category'],
+      relations: ['category', 'variations'],
     });
     if (!products || products.length === 0) {
       throw new NotFoundException('No products found for this category');

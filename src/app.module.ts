@@ -16,6 +16,7 @@ import { CartModule } from './cart/cart.module';
 import { ProductVariationsModule } from './product-variations/product-variations.module';
 import { BrandsModule } from './brands/brands.module';
 import { ConfigModule } from '@nestjs/config';
+import { HealthController } from './health.controller.js';
 @Module({
   imports: [
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
@@ -45,7 +46,7 @@ import { ConfigModule } from '@nestjs/config';
     ProductVariationsModule,
     BrandsModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, HealthController],
   providers: [AppService, PaymentsService],
 })
 export class AppModule implements NestModule {

@@ -17,7 +17,8 @@ let cachedServer: ReturnType<typeof createServer> | null = null;
  */
 async function bootstrapServer(): Promise<Handler> {
   if (cachedServer) {
-    return (event, context, callback) => proxy(cachedServer!, event, context, 'PROMISE').promise;
+    return (event, context, callback) =>
+      proxy(cachedServer!, event, context, 'PROMISE').promise;
   }
 
   // 1) Créer une instance Express + Nest
@@ -38,12 +39,17 @@ async function bootstrapServer(): Promise<Handler> {
   });
 
   // Pour Stripe ou tout autre webhook qui attend un body raw
-  nestApp.use('/payments/webhook', bodyParser.raw({ type: 'application/json' }));
+  nestApp.use(
+    '/payments/webhook',
+    bodyParser.raw({ type: 'application/json' }),
+  );
 
   // 3) Swagger (toujours disponible à /api-docs ou /api selon votre config)
   const config = new DocumentBuilder()
     .setTitle('E-commerce API')
-    .setDescription('API de gestion des utilisateurs, produits, commandes, etc.')
+    .setDescription(
+      'API de gestion des utilisateurs, produits, commandes, etc.',
+    )
     .setVersion('1.0')
     .addTag('ecommerce')
     .build();
@@ -58,14 +64,19 @@ async function bootstrapServer(): Promise<Handler> {
 
   // 5) Construire le server Lambda via aws-serverless-express
   cachedServer = createServer(expressApp);
-  return (event, context, callback) => proxy(cachedServer!, event, context, 'PROMISE').promise;
+  return (event, context, callback) =>
+    proxy(cachedServer!, event, context, 'PROMISE').promise;
 }
 
 /**
  * Export “handler” que Vercel appellera pour chaque requête.
  * C’est le point d’entrée serverless.
  */
-export const handler: Handler = async (event: any, context: Context, callback: Callback) => {
+export const handler: Handler = async (
+  event: any,
+  context: Context,
+  callback: Callback,
+) => {
   const server = await bootstrapServer();
   return server(event, context, callback);
 };

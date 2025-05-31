@@ -50,4 +50,12 @@ export class UpdateProductDto extends PartialType(CreateProductDto) {
   @IsOptional()
   @IsNumber()
   categoryId?: number;
+
+  @ApiProperty({
+    example: 'NIKE',
+    description: 'marque du produit',
+  })
+  @IsOptional()
+  @IsNumber()
+  brandId?: number;
 }

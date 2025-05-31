@@ -35,7 +35,9 @@ export class BrandsService {
   async update(id: number, updateBrandDto: UpdateBrandDto): Promise<Brand> {
     const brand = await this.findBrandById(id); // retourne un seul Brand
     Object.assign(brand, updateBrandDto);
-    return this.brandsRepository.save(brand);
+    const result = this.brandsRepository.save(brand);
+    console.log(result);
+    return result;
   }
 
   async remove(id: number): Promise<void> {

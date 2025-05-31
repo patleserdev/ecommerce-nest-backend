@@ -15,16 +15,18 @@ import { InvoicesModule } from './invoices/invoices.module';
 import { CartModule } from './cart/cart.module';
 import { ProductVariationsModule } from './product-variations/product-variations.module';
 import { BrandsModule } from './brands/brands.module';
-
+import { ConfigModule } from '@nestjs/config';
 @Module({
   imports: [
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+    ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root', // modifie selon ton utilisateur
-      password: '', // modifie selon ton mot de passe
-      database: 'nest_ecommerce', // crée cette base ou change le nom
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT),
+      username: process.env.DB_USERNAME, // modifie selon ton utilisateur
+      password: process.env.DB_PASSWORD, // modifie selon ton mot de passe
+      database: process.env.DB_DATABASE_NAME, // crée cette base ou change le nom
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       autoLoadEntities: true,
       synchronize: false, // ⚠️ à désactiver en prod

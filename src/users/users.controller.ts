@@ -54,9 +54,16 @@ export class UsersController {
     const loginResult = await this.authService.login(email, password);
 
     const token = loginResult.access_token;
-
+    const role = loginResult.role;
     // Envoie le token dans un cookie HttpOnly
     res.cookie('oeb-token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // true en prod (HTTPS)
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 jours
+      sameSite: 'lax',
+      path: '/',
+    });
+    res.cookie('role', role, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production', // true en prod (HTTPS)
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 jours
@@ -126,5 +133,16 @@ export class UsersController {
     }
 
     await this.usersService.remove(user.id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'Déconnexion' })
+  @Post('logout')
+  logout(@Res({ passthrough: true }) res: Response) {
+    // Supprimer les cookies
+    res.clearCookie('oeb-token', { path: '/' });
+    res.clearCookie('role', { path: '/' });
+
+    return { message: 'Logged out successfully' };
   }
 }

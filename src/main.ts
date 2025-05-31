@@ -2,12 +2,15 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as bodyParser from 'body-parser';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.use(cookieParser()); // <-- IMPORTANT
+
   app.enableCors({
-    origin: 'http://localhost:3001', // <-- autorise Next.js
+    origin: process.env.URL_FRONTEND, // <-- autorise Next.js
     credentials: true, // <-- si tu veux utiliser des cookies ou headers auth
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],

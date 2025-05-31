@@ -5,6 +5,7 @@ import { Product } from '../products/entities/product.entity';
 import { Category } from '../categories/entities/category.entity';
 import { CreateProductDto } from '../products/dto/create-product.dto';
 import { UpdateProductDto } from '../products/dto/update-product.dto';
+import { Brand } from '../brands/entities/brand.entity';
 // import { CreateCategoryDto } from '../categories/dto/create-category.dto';
 // import { UpdateCategoryDto } from '../categories/dto/update-category.dto';
 
@@ -15,6 +16,8 @@ export class ProductsService {
     private productsRepository: Repository<Product>,
     @InjectRepository(Category)
     private categoriesRepository: Repository<Category>,
+    @InjectRepository(Brand)
+    private brandsRepository: Repository<Category>,
   ) {}
 
   async createProduct(createProductDto: CreateProductDto): Promise<Product> {
@@ -31,14 +34,14 @@ export class ProductsService {
 
   async findAllProducts(): Promise<Product[]> {
     return this.productsRepository.find({
-      relations: ['category', 'variations'],
+      relations: ['category', 'variations', 'brand'],
     });
   }
 
   async findProductById(id: number): Promise<Product> {
     const product = await this.productsRepository.findOne({
       where: { id },
-      relations: ['category', 'variations'],
+      relations: ['category', 'variations', 'brand'],
     });
     if (!product) {
       throw new NotFoundException('Product not found');
@@ -49,7 +52,7 @@ export class ProductsService {
   async findBySlug(slug: string): Promise<Product> {
     const product = await this.productsRepository.findOne({
       where: { slug },
-      relations: ['category', 'variations'],
+      relations: ['category', 'variations', 'brand'],
     });
 
     if (!product) {
@@ -66,7 +69,7 @@ export class ProductsService {
     const products = await this.productsRepository.find({
       order: { name: 'ASC' },
       where: { category: { id: categoryId } },
-      relations: ['category', 'variations'],
+      relations: ['category', 'variations', 'brand'],
     });
     if (!products || products.length === 0) {
       throw new NotFoundException('No products found for this category');
@@ -80,7 +83,7 @@ export class ProductsService {
     updateProductDto: UpdateProductDto,
   ): Promise<Product> {
     const product = await this.findProductById(id);
-    const { categoryId, ...rest } = updateProductDto;
+    const { categoryId, brandId, ...rest } = updateProductDto;
     if (categoryId) {
       const category = await this.categoriesRepository.findOne({
         where: { id: categoryId },
@@ -89,6 +92,16 @@ export class ProductsService {
         throw new NotFoundException('Category not found');
       }
       product.category = category;
+    }
+
+    if (brandId) {
+      const brand = await this.brandsRepository.findOne({
+        where: { id: brandId },
+      });
+      if (!brand) {
+        throw new NotFoundException('Brand not found');
+      }
+      product.brand = brand;
     }
     Object.assign(product, rest);
     return this.productsRepository.save(product);

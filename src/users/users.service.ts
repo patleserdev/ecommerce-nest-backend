@@ -15,7 +15,7 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    const { email, password, role } = createUserDto;
+    const { email, username, password, role } = createUserDto;
 
     const existingUser = await this.usersRepository.findOne({
       where: { email: email },
@@ -27,6 +27,7 @@ export class UsersService {
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = this.usersRepository.create({
       email,
+      username,
       password: hashedPassword,
       role,
     });
@@ -34,7 +35,10 @@ export class UsersService {
   }
 
   async findOneByEmail(email: string): Promise<User> {
-    const user = await this.usersRepository.findOne({ where: { email } });
+    const user = await this.usersRepository.findOne({
+      where: { email },
+      select: ['id', 'email', 'role', 'username', 'password'], // <= IMPORTANT
+    });
 
     if (!user) {
       throw new NotFoundException('Aucune utilisateur trouvé');

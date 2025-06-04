@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { Product } from '../../products/entities/product.entity';
-
+import { AdressRole } from 'src/address-roles/entities/address-role.entity';
 @Entity()
 export class Cart {
   @PrimaryGeneratedColumn()
@@ -18,6 +18,9 @@ export class Cart {
 
   @OneToMany(() => CartItem, (cartItem) => cartItem.cart, { cascade: true })
   items: CartItem[];
+
+  @OneToMany(() => AdressRole, (adresse) => adresse.cart)
+  adresses: AdressRole[];
 }
 
 @Entity()

@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateBrandDto } from './dto/create-brand.dto';
 import { UpdateBrandDto } from './dto/update-brand.dto';
-import { Brand } from './entities/brand.entity.js';
+import { Brand } from './entities/brand.entity';
 @Injectable()
 export class BrandsService {
   constructor(

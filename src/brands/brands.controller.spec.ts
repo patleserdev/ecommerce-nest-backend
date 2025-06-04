@@ -6,9 +6,19 @@ describe('BrandsController', () => {
   let controller: BrandsController;
 
   beforeEach(async () => {
+    const mockBrandsService = {
+      // mocks des méthodes utilisées par BrandsController
+      findAll: jest.fn().mockResolvedValue([]),
+    };
+
     const module: TestingModule = await Test.createTestingModule({
       controllers: [BrandsController],
-      providers: [BrandsService],
+      providers: [
+        {
+          provide: BrandsService,
+          useValue: mockBrandsService,
+        },
+      ],
     }).compile();
 
     controller = module.get<BrandsController>(BrandsController);

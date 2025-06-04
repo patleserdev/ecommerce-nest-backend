@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { Product } from '../../products/entities/product.entity';
-
+import { AdressRole } from 'src/address-roles/entities/address-role.entity';
 @Entity()
 export class Order {
   @PrimaryGeneratedColumn()
@@ -28,6 +28,9 @@ export class Order {
 
   @OneToMany(() => OrderItem, (orderItem) => orderItem.order, { cascade: true })
   items: OrderItem[];
+
+  @OneToMany(() => AdressRole, (adresse) => adresse.order)
+  adresses: AdressRole[];
 }
 
 @Entity()

@@ -32,7 +32,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         extractJwtFromCookie('oeb-token'),
       ]),
       ignoreExpiration: true,
-      secretOrKey: 'test', // Change this to an environment variable
+      secretOrKey: `${process.env.JWT_SECRET}`,
     });
   }
 

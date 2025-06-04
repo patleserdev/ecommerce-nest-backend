@@ -17,9 +17,10 @@ import { ProductVariationsModule } from './product-variations/product-variations
 import { BrandsModule } from './brands/brands.module';
 import { ConfigModule } from '@nestjs/config';
 import { HealthController } from './health.controller.js';
+import { AddressesModule } from './addresses/addresses.module';
+import { AddressRolesModule } from './address-roles/address-roles.module';
 @Module({
   imports: [
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: 'mysql',
@@ -45,6 +46,8 @@ import { HealthController } from './health.controller.js';
     CartModule,
     ProductVariationsModule,
     BrandsModule,
+    AddressesModule,
+    AddressRolesModule,
   ],
   controllers: [AppController, HealthController],
   providers: [AppService, PaymentsService],

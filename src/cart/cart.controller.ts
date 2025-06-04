@@ -9,8 +9,8 @@ import {
   Req,
 } from '@nestjs/common';
 import { CartService } from './cart.service';
-import { CreateCartItemDto } from './dto/create-cart-item.dto.js';
-import { UpdateCartItemDto } from './dto/update-cart-item.dto.js';
+import { CreateCartItemDto } from './dto/create-cart-item.dto';
+import { UpdateCartItemDto } from './dto/update-cart-item.dto';
 import { Request } from 'express';
 import { UnauthorizedException } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBody } from '@nestjs/swagger';

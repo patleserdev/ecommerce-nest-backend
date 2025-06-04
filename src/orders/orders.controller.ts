@@ -8,8 +8,8 @@ import {
   Delete,
 } from '@nestjs/common';
 import { OrdersService } from './orders.service';
-import { CreateOrderDto } from './dto/create-order.dto.js';
-import { UpdateOrderStatusDto } from './dto/update-order.dto.js';
+import { CreateOrderDto } from './dto/create-order.dto';
+import { UpdateOrderStatusDto } from './dto/update-order.dto';
 import { ApiTags, ApiOperation, ApiBody } from '@nestjs/swagger';
 
 @ApiTags('orders')

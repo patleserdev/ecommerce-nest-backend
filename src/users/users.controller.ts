@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
-import { UpdateUserDto } from '../users/dto/update-user.dto.js';
+import { UpdateUserDto } from '../users/dto/update-user.dto';
 import { JwtAuthGuard } from '../auth/jwt/jwt.guard';
 import { Request } from 'express';
 import { AuthService } from '../auth/auth.service';
@@ -50,28 +50,37 @@ export class UsersController {
     @Body() body: { email: string; password: string },
     @Res({ passthrough: true }) res: Response,
   ) {
-    const { email, password } = body;
-    const loginResult = await this.authService.login(email, password);
+    try {
+      const { email, password } = body;
+      const loginResult = await this.authService.login(email, password);
 
-    const token = loginResult.access_token;
-    const role = loginResult.role;
-    // Envoie le token dans un cookie HttpOnly
-    res.cookie('oeb-token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production', // true en prod (HTTPS)
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 jours
-      sameSite: 'lax',
-      path: '/',
-    });
-    res.cookie('role', role, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production', // true en prod (HTTPS)
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 jours
-      sameSite: 'lax',
-      path: '/',
-    });
+      const token = loginResult.access_token;
+      const role = loginResult.role;
+      const username = loginResult.username;
 
-    return { message: 'Connexion réussie' };
+      // Envoie le token dans un cookie HttpOnly
+      res.cookie('oeb-token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production', // true en prod (HTTPS)
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 jours
+        sameSite: 'lax',
+        path: '/',
+      });
+      res.cookie('role', role, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production', // true en prod (HTTPS)
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 jours
+        sameSite: 'lax',
+        path: '/',
+      });
+
+      return { message: 'Connexion réussie', username: username };
+    } catch (error) {
+      console.error('Erreur de connexion:', error);
+      return res
+        .status(401)
+        .json({ message: 'Email ou mot de passe incorrect' });
+    }
   }
 
   @UseGuards(JwtAuthGuard)
@@ -92,7 +101,7 @@ export class UsersController {
     const user = req.user as UserPayload;
 
     if (!user) {
-      throw new UnauthorizedException('User not found in request');
+      throw new UnauthorizedException('Utilisateur cible non trouvé');
     }
 
     let targetUserId = user.id;
@@ -125,7 +134,7 @@ export class UsersController {
   async deleteProfile(@Req() req: Request) {
     const user = req.user as UserPayload | undefined;
     if (!user) {
-      throw new UnauthorizedException('User not found in request');
+      throw new UnauthorizedException('Utilisateur cible non trouvé');
     }
 
     if (user.role !== 'admin') {
@@ -143,6 +152,6 @@ export class UsersController {
     res.clearCookie('oeb-token', { path: '/' });
     res.clearCookie('role', { path: '/' });
 
-    return { message: 'Logged out successfully' };
+    return { message: 'Déconnexion OK' };
   }
 }

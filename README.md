@@ -1,76 +1,281 @@
-# ecommerce-nest-backcend
-Développement d'une solution backend de gestion de site e-commerce avec Nest JS
+# 📦 E-commerce API (v1.0)
 
-## Routes API fonctionnelles
+> API RESTful pour la gestion des utilisateurs, produits, commandes, paiements, panier, etc.  
 
-### 🔐 POST `/users/register`
+---
 
-Permet l'enregistrement d'un nouvel utilisateur.
-req{
-  "username": "string",
-  "email": "string",
-  "password": "string",
-  "role": "string",       // Exemple : "customer" ou "admin"
-  "profile": "string"     // URL de l'image ou texte, optionnel
-}
-res{
+## 🏠 App
 
-}
+### `GET /api`
 
-### 🔐 POST `/users/login`
+- **Description** : Description Swagger de l'API
 
-Permet la connexion d'un utilisateur.
-req{
-  "username": "string",
-  "email": "string",
-  "password": "string",
-  "role": "string",       // Exemple : "customer" ou "admin"
-  "profile": "string"     // URL de l'image ou texte, optionnel
-}
-res{
-    "access_token": "string",
-}
+---
 
- {/users/login, POST} route +1ms
- {/users/profile, GET} route +1ms
- {/users/profile, PATCH} route +1ms
- {/users/profile, DELETE} route +1ms
-[Nest] 16644  - 15/05/2025 17:45:20     LOG [RoutesResolver] ProductsController {/products}: +0ms
- {/products, POST} route +1ms
- {/products, GET} route +1ms
- {/products/:id, GET} route +1ms
- {/products/:id, PATCH} route +1ms
- {/products/:id, DELETE} route +1ms
- {/products/categories, POST} route +1ms
- {/products/categories, GET} route +0ms
- {/products/categories/:id, GET} route +1ms
- {/products/categories/:id, PATCH} route +0ms
- {/products/categories/:id, DELETE} route +1ms
-[Nest] 16644  - 15/05/2025 17:45:20     LOG [RoutesResolver] CategoriesController {/categories}: +0ms
- {/categories, POST} route +1ms
- {/categories, GET} route +1ms
- {/categories/:id, GET} route +0ms
- {/categories/:id, PATCH} route +1ms
- {/categories/:id, DELETE} route +1ms
-[Nest] 16644  - 15/05/2025 17:45:20     LOG [RoutesResolver] OrdersController {/orders}: +0ms
- {/orders, POST} route +1ms
- {/orders, GET} route +0ms
- {/orders/:id, GET} route +1ms
- {/orders/:id/status, PATCH} route +1ms
- {/orders/:id, DELETE} route +0ms
-[Nest] 16644  - 15/05/2025 17:45:20     LOG [RoutesResolver] PaymentsController {/payments}: +1ms
- {/payments/create-payment-intent/:orderId, POST} route +0ms
- {/payments/webhook, POST} route +1ms
-[Nest] 16644  - 15/05/2025 17:45:20     LOG [RoutesResolver] InvoicesController {/invoices}: +0ms
- {/invoices/:orderId, GET} route +1ms
-[Nest] 16644  - 15/05/2025 17:45:20     LOG [RoutesResolver] PaymentsController {/payments}: +0ms
- {/payments/create-payment-intent/:orderId, POST} route +1ms
- {/payments/webhook, POST} route +1ms
-[Nest] 16644  - 15/05/2025 17:45:20     LOG [RoutesResolver] InvoicesController {/invoices}: +0ms
- {/invoices/:orderId, GET} route +1ms
-[Nest] 16644  - 15/05/2025 17:45:20     LOG [RoutesResolver] CartController {/cart}: +0ms
- {/cart/add, POST} route +1ms
- {/cart/update/:itemId, PATCH} route +0ms
- {/cart/remove/:itemId, DELETE} route +1ms
- {/cart/summary, GET} route +0ms
- {/cart/checkout, POST} route +1ms
+### `GET /`
+
+- **Description** : Point d'entrée de l'API
+
+---
+
+## 🩺 Health
+
+### `GET /health`
+
+- **Description** : Vérifie l'état de santé de l'API
+
+---
+
+## 👤 Users
+
+### `POST /users/register`
+
+- **Description** : Inscription utilisateur
+
+### `POST /users/login`
+
+- **Description** : Connexion utilisateur
+
+### `GET /users/profile`
+
+- **Description** : Récupérer la photo de profil
+
+### `PATCH /users/profile`
+
+- **Description** : Modifier le profil utilisateur
+
+### `DELETE /users/profile`
+
+- **Description** : Supprimer un utilisateur
+
+### `POST /users/logout`
+
+- **Description** : Déconnexion
+
+---
+
+## 🛍️ Products
+
+### `POST /products`
+
+- **Description** : Ajouter un produit
+
+### `GET /products`
+
+- **Description** : Récupérer tous les produits
+
+### `GET /products/{id}`
+
+- **Description** : Récupérer un produit par ID
+
+### `PATCH /products/{id}`
+
+- **Description** : Modifier un produit
+
+### `DELETE /products/{id}`
+
+- **Description** : Supprimer un produit
+
+### `GET /products/slug/{slug}`
+
+- **Description** : Récupérer un produit par son slug
+
+### `GET /products/categories/{id}`
+
+- **Description** : Récupérer les produits d'une catégorie
+
+---
+
+## 🧩 Product Variations
+
+### `POST /product-variations`
+
+- **Description** : Ajouter une variation
+
+### `GET /product-variations`
+
+- **Description** : Récupérer toutes les variations
+
+### `GET /product-variations/{id}`
+
+- **Description** : Récupérer une variation par ID
+
+### `PATCH /product-variations/{id}`
+
+- **Description** : Modifier une variation
+
+### `DELETE /product-variations/{id}`
+
+- **Description** : Supprimer une variation
+
+---
+
+## 🏷️ Categories
+
+### `POST /categories`
+
+- **Description** : Ajouter une catégorie
+
+### `GET /categories`
+
+- **Description** : Récupérer toutes les catégories
+
+### `GET /categories/{id}`
+
+- **Description** : Récupérer une catégorie par ID
+
+### `PATCH /categories/{id}`
+
+- **Description** : Modifier une catégorie
+
+### `DELETE /categories/{id}`
+
+- **Description** : Supprimer une catégorie
+
+### `GET /categories/slug/{slug}`
+
+- **Description** : Récupérer une catégorie par slug parent
+
+### `GET /categories/parent/{id}`
+
+- **Description** : Récupérer les sous-catégories
+
+---
+
+## 🛒 Cart
+
+### `POST /cart/add`
+
+- **Description** : Ajouter un article au panier
+
+### `PATCH /cart/update/{itemId}`
+
+- **Description** : Modifier un article du panier
+
+### `DELETE /cart/remove/{itemId}`
+
+- **Description** : Supprimer un article du panier
+
+### `GET /cart/summary`
+
+- **Description** : Récupérer le contenu du panier
+
+### `POST /cart/checkout`
+
+- **Description** : Valider un panier
+
+---
+
+## 🧾 Orders
+
+### `POST /orders`
+
+- **Description** : Créer une commande
+
+### `GET /orders`
+
+- **Description** : Récupérer toutes les commandes
+
+### `GET /orders/{id}`
+
+- **Description** : Récupérer une commande par ID
+
+### `DELETE /orders/{id}`
+
+- **Description** : Supprimer une commande
+
+### `PATCH /orders/{id}/status`
+
+- **Description** : Modifier le statut d'une commande
+
+---
+
+## 💳 Payments
+
+### `POST /payments/create-payment-intent/{orderId}`
+
+- **Description** : Créer un paiement Stripe pour une commande
+
+### `POST /payments/webhook`
+
+- **Description** : Gérer les webhooks Stripe
+
+---
+
+## 📄 Invoices
+
+### `GET /invoices/{orderId}`
+
+- **Description** : Générer la facture d'une commande
+
+---
+
+## 🏭 Brands
+
+### `POST /brands`
+
+- **Description** : Ajouter une marque
+
+### `GET /brands`
+
+- **Description** : Récupérer toutes les marques
+
+### `GET /brands/{id}`
+
+- **Description** : Récupérer une marque par ID
+
+### `PATCH /brands/{id}`
+
+- **Description** : Modifier une marque
+
+### `DELETE /brands/{id}`
+
+- **Description** : Supprimer une marque
+
+---
+
+## 🏡 Addresses
+
+### `POST /addresses`
+
+- **Description** : Ajouter une adresse
+
+### `GET /addresses`
+
+- **Description** : Récupérer toutes les adresses
+
+### `GET /addresses/{id}`
+
+- **Description** : Récupérer une adresse par ID
+
+### `PATCH /addresses/{id}`
+
+- **Description** : Modifier une adresse
+
+### `DELETE /addresses/{id}`
+
+- **Description** : Supprimer une adresse
+
+---
+
+## 🔐 Address Roles
+
+### `POST /address-roles`
+
+- **Description** : Créer un rôle d'adresse
+
+### `GET /address-roles`
+
+- **Description** : Récupérer tous les rôles d'adresse
+
+### `GET /address-roles/{id}`
+
+- **Description** : Récupérer un rôle par ID
+
+### `PATCH /address-roles/{id}`
+
+- **Description** : Modifier un rôle
+
+### `DELETE /address-roles/{id}`
+
+- **Description** : Supprimer un rôle

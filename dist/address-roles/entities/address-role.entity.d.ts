@@ -2,10 +2,10 @@ import { Adress } from '../../addresses/entities/address.entity';
 import { User } from '../../users/entities/user.entity';
 import { Cart } from '../../cart/entities/cart.entities';
 import { Order } from '../../orders/entities/order.entity';
-export type AdresseType = 'livraison' | 'facturation';
+import { AdressRoleType } from '../dto/create-address-role.dto.js';
 export declare class AdressRole {
     id: number;
-    type: AdresseType;
+    type: AdressRoleType;
     adresse: Adress;
     user: User;
     cart: Cart;

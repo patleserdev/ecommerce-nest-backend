@@ -15,6 +15,7 @@ const address_entity_1 = require("../../addresses/entities/address.entity");
 const user_entity_1 = require("../../users/entities/user.entity");
 const cart_entities_1 = require("../../cart/entities/cart.entities");
 const order_entity_1 = require("../../orders/entities/order.entity");
+const create_address_role_dto_js_1 = require("../dto/create-address-role.dto.js");
 let AdressRole = class AdressRole {
     id;
     type;
@@ -29,7 +30,7 @@ __decorate([
     __metadata("design:type", Number)
 ], AdressRole.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'enum', enum: ['livraison', 'facturation'] }),
+    (0, typeorm_1.Column)({ type: 'enum', enum: ['none', 'livraison', 'facturation'] }),
     __metadata("design:type", String)
 ], AdressRole.prototype, "type", void 0);
 __decorate([
@@ -38,7 +39,7 @@ __decorate([
     __metadata("design:type", address_entity_1.Adress)
 ], AdressRole.prototype, "adresse", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => user_entity_1.User, { nullable: true }),
+    (0, typeorm_1.ManyToOne)(() => user_entity_1.User, { nullable: true, eager: false }),
     (0, typeorm_1.JoinColumn)(),
     __metadata("design:type", user_entity_1.User)
 ], AdressRole.prototype, "user", void 0);

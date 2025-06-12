@@ -23,18 +23,46 @@ let AddressRolesService = class AddressRolesService {
         this.addressRoleRepository = addressRoleRepository;
     }
     async create(createDto) {
+        const { adresse, user, type, cart, order } = createDto;
+        const where = {
+            adresse: { id: adresse.id },
+            user: { id: user.id },
+            type,
+        };
+        if (cart?.id) {
+            where.cart = { id: cart.id };
+        }
+        if (order?.id) {
+            where.order = { id: order.id };
+        }
+        const existing = await this.addressRoleRepository.findOne({ where });
+        if (existing) {
+            return existing;
+        }
         const role = this.addressRoleRepository.create(createDto);
         return await this.addressRoleRepository.save(role);
     }
+    async createMany(createDtos) {
+        const roles = this.addressRoleRepository.create(createDtos);
+        return await this.addressRoleRepository.save(roles);
+    }
+    async findByUserIdAndType(userId, type) {
+        return await this.addressRoleRepository.findOne({
+            where: {
+                user: { id: userId },
+                type,
+            },
+        });
+    }
     async findAll() {
         return await this.addressRoleRepository.find({
-            relations: ['adresse', 'user', 'cart', 'order', 'invoice'],
+            relations: ['adresse', 'user', 'cart', 'order'],
         });
     }
     async findOne(id) {
         const role = await this.addressRoleRepository.findOne({
             where: { id },
-            relations: ['adresse', 'user', 'cart', 'order', 'invoice'],
+            relations: ['adresse', 'user', 'cart', 'order'],
         });
         if (!role) {
             throw new common_1.NotFoundException(`AddressRole #${id} not found`);

@@ -3,5 +3,5 @@
     /** générer une nouvelle migration**/
     yarn typeorm migration:generate src/migrations/fix-user-table --dataSource src/data-source.ts
 /**exécuter**/
-    yarn typeorm migration:run --dataSource src/data-source.ts -r ts-node/register
+    yarn typeorm migration:run --dataSource src/data-source.ts 
 

@@ -19,14 +19,23 @@ export class AddressesService {
 
   async findAll(): Promise<Adress[]> {
     return await this.addressRepository.find({
-      relations: ['roles', 'user', 'cart', 'order', 'invoice'],
+      relations: ['roles'],
     });
+  }
+
+  async findAllByUser(userId: number): Promise<Adress[]> {
+    return this.addressRepository
+      .createQueryBuilder('address')
+      .innerJoin('address.roles', 'role')
+      .where('role.user.id = :userId', { userId })
+      .leftJoinAndSelect('address.roles', 'roles')
+      .getMany();
   }
 
   async findOne(id: number): Promise<Adress> {
     const address = await this.addressRepository.findOne({
       where: { id },
-      relations: ['roles', 'user', 'cart', 'order', 'invoice'],
+      relations: ['roles'],
     });
     if (!address) {
       throw new NotFoundException(`Address #${id} not found`);

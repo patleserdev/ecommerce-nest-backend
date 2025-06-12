@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateAddressDto = void 0;
 const class_validator_1 = require("class-validator");
+const class_validator_2 = require("class-validator");
 class CreateAddressDto {
     title;
     firstName;
@@ -21,6 +22,7 @@ class CreateAddressDto {
     city;
     country;
     phoneToDelivery;
+    roles = [];
 }
 exports.CreateAddressDto = CreateAddressDto;
 __decorate([
@@ -68,4 +70,9 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateAddressDto.prototype, "phoneToDelivery", void 0);
+__decorate([
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_2.ValidateNested)({ each: true }),
+    __metadata("design:type", Array)
+], CreateAddressDto.prototype, "roles", void 0);
 //# sourceMappingURL=create-address.dto.js.map

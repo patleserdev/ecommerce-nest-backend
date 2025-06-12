@@ -1,30 +1,30 @@
 import { IsEnum, IsOptional, IsInt } from 'class-validator';
 
 export enum AdressRoleType {
+  NONE = 'none',
   LIVRAISON = 'livraison',
   FACTURATION = 'facturation',
 }
 
 export class CreateAddressRoleDto {
-  @IsInt()
-  adresseId: number;
+  adresse: { id: number };
 
+  @IsOptional()
   @IsEnum(AdressRoleType)
-  type: AdressRoleType;
+  type?: AdressRoleType;
+
+  @IsOptional()
+  user: { id: number };
 
   @IsOptional()
   @IsInt()
-  userId?: number;
+  cart?: { id: number };
 
   @IsOptional()
   @IsInt()
-  cartId?: number;
+  order?: { id: number };
 
   @IsOptional()
   @IsInt()
-  orderId?: number;
-
-  @IsOptional()
-  @IsInt()
-  invoiceId?: number;
+  invoice?: { id: number };
 }

@@ -1,4 +1,6 @@
-import { IsOptional, IsString, IsNotEmpty } from 'class-validator';
+import { IsOptional, IsString, IsNotEmpty, IsArray } from 'class-validator';
+import { ValidateNested } from 'class-validator';
+import { CreateAddressRoleDto } from '../../address-roles/dto/create-address-role.dto.js';
 
 export class CreateAddressDto {
   @IsString()
@@ -36,4 +38,8 @@ export class CreateAddressDto {
   @IsOptional()
   @IsString()
   phoneToDelivery?: string;
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  roles: CreateAddressRoleDto[] = [];
 }

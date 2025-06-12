@@ -13,6 +13,10 @@ export declare class UsersController {
     private readonly usersService;
     private readonly authService;
     constructor(usersService: UsersService, authService: AuthService);
+    getMe(req: Request): {
+        id: number;
+        email: string;
+    };
     register(createUserDto: CreateUserDto): Promise<import("./entities/user.entity").User>;
     login(body: {
         email: string;

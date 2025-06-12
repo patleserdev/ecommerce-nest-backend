@@ -7,6 +7,7 @@ export declare class AddressesService {
     constructor(addressRepository: Repository<Adress>);
     create(createAddressDto: CreateAddressDto): Promise<Adress>;
     findAll(): Promise<Adress[]>;
+    findAllByUser(userId: number): Promise<Adress[]>;
     findOne(id: number): Promise<Adress>;
     update(id: number, updateDto: UpdateAddressDto): Promise<Adress>;
     remove(id: number): Promise<void>;

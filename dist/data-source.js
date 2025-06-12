@@ -11,6 +11,8 @@ const payment_entity_1 = require("./payments/entities/payment.entity");
 const product_variation_entity_1 = require("./product-variations/entities/product-variation.entity");
 const product_entity_1 = require("./products/entities/product.entity");
 const user_entity_1 = require("./users/entities/user.entity");
+const address_entity_1 = require("./addresses/entities/address.entity");
+const address_role_entity_1 = require("./address-roles/entities/address-role.entity");
 exports.AppDataSource = new typeorm_1.DataSource({
     type: 'mysql',
     host: 'localhost',
@@ -30,6 +32,8 @@ exports.AppDataSource = new typeorm_1.DataSource({
         product_variation_entity_1.ProductVariation,
         product_entity_1.Product,
         user_entity_1.User,
+        address_entity_1.Adress,
+        address_role_entity_1.AdressRole,
     ],
     migrations: ['src/migrations/*.ts'],
     synchronize: false,

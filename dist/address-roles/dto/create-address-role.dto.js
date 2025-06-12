@@ -13,44 +13,41 @@ exports.CreateAddressRoleDto = exports.AdressRoleType = void 0;
 const class_validator_1 = require("class-validator");
 var AdressRoleType;
 (function (AdressRoleType) {
+    AdressRoleType["NONE"] = "none";
     AdressRoleType["LIVRAISON"] = "livraison";
     AdressRoleType["FACTURATION"] = "facturation";
 })(AdressRoleType || (exports.AdressRoleType = AdressRoleType = {}));
 class CreateAddressRoleDto {
-    adresseId;
+    adresse;
     type;
-    userId;
-    cartId;
-    orderId;
-    invoiceId;
+    user;
+    cart;
+    order;
+    invoice;
 }
 exports.CreateAddressRoleDto = CreateAddressRoleDto;
 __decorate([
-    (0, class_validator_1.IsInt)(),
-    __metadata("design:type", Number)
-], CreateAddressRoleDto.prototype, "adresseId", void 0);
-__decorate([
+    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsEnum)(AdressRoleType),
     __metadata("design:type", String)
 ], CreateAddressRoleDto.prototype, "type", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsInt)(),
-    __metadata("design:type", Number)
-], CreateAddressRoleDto.prototype, "userId", void 0);
+    __metadata("design:type", Object)
+], CreateAddressRoleDto.prototype, "user", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsInt)(),
-    __metadata("design:type", Number)
-], CreateAddressRoleDto.prototype, "cartId", void 0);
+    __metadata("design:type", Object)
+], CreateAddressRoleDto.prototype, "cart", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsInt)(),
-    __metadata("design:type", Number)
-], CreateAddressRoleDto.prototype, "orderId", void 0);
+    __metadata("design:type", Object)
+], CreateAddressRoleDto.prototype, "order", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsInt)(),
-    __metadata("design:type", Number)
-], CreateAddressRoleDto.prototype, "invoiceId", void 0);
+    __metadata("design:type", Object)
+], CreateAddressRoleDto.prototype, "invoice", void 0);
 //# sourceMappingURL=create-address-role.dto.js.map

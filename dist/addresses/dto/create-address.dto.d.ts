@@ -1,3 +1,4 @@
+import { CreateAddressRoleDto } from '../../address-roles/dto/create-address-role.dto.js';
 export declare class CreateAddressDto {
     title: string;
     firstName: string;
@@ -8,4 +9,5 @@ export declare class CreateAddressDto {
     city: string;
     country: string;
     phoneToDelivery?: string;
+    roles: CreateAddressRoleDto[];
 }

@@ -17,13 +17,28 @@ const common_1 = require("@nestjs/common");
 const address_roles_service_1 = require("./address-roles.service");
 const create_address_role_dto_1 = require("./dto/create-address-role.dto");
 const update_address_role_dto_1 = require("./dto/update-address-role.dto");
+const jwt_guard_1 = require("../auth/jwt/jwt.guard");
+const common_2 = require("@nestjs/common");
 let AddressRolesController = class AddressRolesController {
     addressRolesService;
     constructor(addressRolesService) {
         this.addressRolesService = addressRolesService;
     }
-    create(createAddressRoleDto) {
-        return this.addressRolesService.create(createAddressRoleDto);
+    async create(req, createAddressRoleDto) {
+        const userId = req.user.id;
+        if (!createAddressRoleDto.type) {
+            throw new common_2.BadRequestException("Le type d'adresse est requis.");
+        }
+        const existingAddressRole = await this.addressRolesService.findByUserIdAndType(userId, createAddressRoleDto.type);
+        if (existingAddressRole) {
+            return this.addressRolesService.update(existingAddressRole.id, {
+                ...createAddressRoleDto,
+            });
+        }
+        return this.addressRolesService.create({
+            ...createAddressRoleDto,
+            user: { id: userId },
+        });
     }
     findAll() {
         return this.addressRolesService.findAll();
@@ -40,11 +55,13 @@ let AddressRolesController = class AddressRolesController {
 };
 exports.AddressRolesController = AddressRolesController;
 __decorate([
+    (0, common_1.UseGuards)(jwt_guard_1.JwtAuthGuard),
     (0, common_1.Post)(),
-    __param(0, (0, common_1.Body)()),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_address_role_dto_1.CreateAddressRoleDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:paramtypes", [Object, create_address_role_dto_1.CreateAddressRoleDto]),
+    __metadata("design:returntype", Promise)
 ], AddressRolesController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),

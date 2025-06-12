@@ -21,7 +21,6 @@ let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(pas
         const extractJwtFromCookie = (cookieName) => (req) => {
             const request = req;
             const token = request?.cookies?.[cookieName] || null;
-            console.log('Token extrait du cookie:', token);
             return token;
         };
         super({

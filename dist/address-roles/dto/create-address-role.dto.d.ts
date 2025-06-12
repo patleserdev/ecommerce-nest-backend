@@ -1,12 +1,23 @@
 export declare enum AdressRoleType {
+    NONE = "none",
     LIVRAISON = "livraison",
     FACTURATION = "facturation"
 }
 export declare class CreateAddressRoleDto {
-    adresseId: number;
-    type: AdressRoleType;
-    userId?: number;
-    cartId?: number;
-    orderId?: number;
-    invoiceId?: number;
+    adresse: {
+        id: number;
+    };
+    type?: AdressRoleType;
+    user: {
+        id: number;
+    };
+    cart?: {
+        id: number;
+    };
+    order?: {
+        id: number;
+    };
+    invoice?: {
+        id: number;
+    };
 }

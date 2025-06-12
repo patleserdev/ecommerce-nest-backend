@@ -12,21 +12,21 @@ import { User } from '../../users/entities/user.entity';
 import { Cart } from '../../cart/entities/cart.entities';
 import { Order } from '../../orders/entities/order.entity';
 import { Invoice } from '../../invoices/entities/invoice.entity';
-export type AdresseType = 'livraison' | 'facturation';
+import { AdressRoleType } from '../dto/create-address-role.dto.js';
 
 @Entity()
 export class AdressRole {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'enum', enum: ['livraison', 'facturation'] })
-  type: AdresseType;
+  @Column({ type: 'enum', enum: ['none', 'livraison', 'facturation'] })
+  type: AdressRoleType;
 
   @ManyToOne(() => Adress, (adresse) => adresse.roles, { onDelete: 'CASCADE' })
   @JoinColumn()
   adresse: Adress;
 
-  @ManyToOne(() => User, { nullable: true })
+  @ManyToOne(() => User, { nullable: true, eager: false })
   @JoinColumn()
   user: User;
 

@@ -28,13 +28,21 @@ let AddressesService = class AddressesService {
     }
     async findAll() {
         return await this.addressRepository.find({
-            relations: ['roles', 'user', 'cart', 'order', 'invoice'],
+            relations: ['roles'],
         });
+    }
+    async findAllByUser(userId) {
+        return this.addressRepository
+            .createQueryBuilder('address')
+            .innerJoin('address.roles', 'role')
+            .where('role.user.id = :userId', { userId })
+            .leftJoinAndSelect('address.roles', 'roles')
+            .getMany();
     }
     async findOne(id) {
         const address = await this.addressRepository.findOne({
             where: { id },
-            relations: ['roles', 'user', 'cart', 'order', 'invoice'],
+            relations: ['roles'],
         });
         if (!address) {
             throw new common_1.NotFoundException(`Address #${id} not found`);

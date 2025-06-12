@@ -36,6 +36,18 @@ export class UsersController {
     private readonly authService: AuthService,
   ) {}
 
+  @UseGuards(JwtAuthGuard)
+  @Get('me')
+  getMe(@Req() req: Request) {
+    // req.user est défini par JwtStrategy.validate()
+    const user = req.user as UserPayload;
+
+    return {
+      id: user.id,
+      email: user.email,
+    };
+  }
+
   @ApiOperation({ summary: 'Inscription utilisateur' })
   @ApiBody({ type: CreateUserDto })
   @Post('register')

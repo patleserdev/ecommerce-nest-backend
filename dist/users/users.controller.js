@@ -30,6 +30,13 @@ let UsersController = class UsersController {
         this.usersService = usersService;
         this.authService = authService;
     }
+    getMe(req) {
+        const user = req.user;
+        return {
+            id: user.id,
+            email: user.email,
+        };
+    }
     async register(createUserDto) {
         return this.usersService.create(createUserDto);
     }
@@ -102,6 +109,14 @@ let UsersController = class UsersController {
     }
 };
 exports.UsersController = UsersController;
+__decorate([
+    (0, common_1.UseGuards)(jwt_guard_1.JwtAuthGuard),
+    (0, common_1.Get)('me'),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], UsersController.prototype, "getMe", null);
 __decorate([
     (0, swagger_1.ApiOperation)({ summary: 'Inscription utilisateur' }),
     (0, swagger_1.ApiBody)({ type: create_user_dto_1.CreateUserDto }),

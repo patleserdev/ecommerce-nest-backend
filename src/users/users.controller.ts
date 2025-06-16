@@ -69,11 +69,12 @@ export class UsersController {
       const token = loginResult.access_token;
       const role = loginResult.role;
       const username = loginResult.username;
+      const isProd = process.env.VERCEL === '1'; // ou ta propre variable d'env
 
       // Envoie le token dans un cookie HttpOnly
       res.cookie('oeb-token', token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production', // true en prod (HTTPS)
+        secure: isProd, // true en prod (HTTPS)
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 jours
         // sameSite: 'lax',
         sameSite: 'none',
@@ -82,7 +83,7 @@ export class UsersController {
       });
       res.cookie('role', role, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production', // true en prod (HTTPS)
+        secure: isProd, // true en prod (HTTPS)
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 jours
         sameSite: 'none',
         path: '/',

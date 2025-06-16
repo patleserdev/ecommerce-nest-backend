@@ -51,14 +51,14 @@ let UsersController = class UsersController {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
                 maxAge: 7 * 24 * 60 * 60 * 1000,
-                sameSite: 'lax',
+                sameSite: 'none',
                 path: '/',
             });
             res.cookie('role', role, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
                 maxAge: 7 * 24 * 60 * 60 * 1000,
-                sameSite: 'lax',
+                sameSite: 'none',
                 path: '/',
             });
             return { message: 'Connexion réussie', username: username };

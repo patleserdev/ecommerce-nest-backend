@@ -52,6 +52,7 @@ let AddressesController = class AddressesController {
         return this.addressesService.findAll();
     }
     findOne(req) {
+        console.log('User in request:', req.user);
         const userId = req.user.id;
         if (!userId) {
             throw new common_1.UnauthorizedException('Accès interdit, vous ne pouvez voir que vos adresses');

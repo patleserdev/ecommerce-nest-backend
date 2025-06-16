@@ -17,12 +17,17 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const brand_entity_1 = require("./entities/brand.entity");
+const common_2 = require("@nestjs/common");
 let BrandsService = class BrandsService {
     brandsRepository;
     constructor(brandsRepository) {
         this.brandsRepository = brandsRepository;
     }
-    create(createBrandDto) {
+    async create(createBrandDto) {
+        const existing = await this.brandsRepository.findOneBy(createBrandDto);
+        if (existing) {
+            throw new common_2.ConflictException('Cette marque existe déjà.');
+        }
         const brand = this.brandsRepository.create(createBrandDto);
         return this.brandsRepository.save(brand);
     }

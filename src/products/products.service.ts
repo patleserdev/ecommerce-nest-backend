@@ -21,14 +21,26 @@ export class ProductsService {
   ) {}
 
   async createProduct(createProductDto: CreateProductDto): Promise<Product> {
-    const { categoryId, ...rest } = createProductDto;
+    const { categoryId, brandId, ...rest } = createProductDto;
+
+    const brand = await this.brandsRepository.findOne({
+      where: { id: brandId },
+    });
+    if (!brand) {
+      throw new NotFoundException('Brand not found');
+    }
+
     const category = await this.categoriesRepository.findOne({
       where: { id: categoryId },
     });
     if (!category) {
       throw new NotFoundException('Category not found');
     }
-    const product = this.productsRepository.create({ ...rest, category });
+    const product = this.productsRepository.create({
+      ...rest,
+      category,
+      brand,
+    });
     return this.productsRepository.save(product);
   }
 

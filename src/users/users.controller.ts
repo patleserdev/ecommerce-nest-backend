@@ -75,14 +75,16 @@ export class UsersController {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production', // true en prod (HTTPS)
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 jours
-        sameSite: 'lax',
+        // sameSite: 'lax',
+        sameSite: 'none',
+
         path: '/',
       });
       res.cookie('role', role, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production', // true en prod (HTTPS)
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 jours
-        sameSite: 'lax',
+        sameSite: 'none',
         path: '/',
       });
 

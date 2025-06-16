@@ -67,6 +67,8 @@ export class AddressesController {
   @UseGuards(JwtAuthGuard)
   @Get('/user')
   findOne(@Req() req: Request & { user: JwtUserPayload }) {
+    console.log('User in request:', req.user);
+
     const userId = req.user.id;
     if (!userId) {
       throw new UnauthorizedException(

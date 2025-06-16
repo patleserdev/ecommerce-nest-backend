@@ -37,6 +37,7 @@ let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(pas
         if (!user) {
             throw new common_2.UnauthorizedException();
         }
+        console.log('JWT payload:', payload);
         return user;
     }
 };

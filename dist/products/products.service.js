@@ -29,14 +29,24 @@ let ProductsService = class ProductsService {
         this.brandsRepository = brandsRepository;
     }
     async createProduct(createProductDto) {
-        const { categoryId, ...rest } = createProductDto;
+        const { categoryId, brandId, ...rest } = createProductDto;
+        const brand = await this.brandsRepository.findOne({
+            where: { id: brandId },
+        });
+        if (!brand) {
+            throw new common_1.NotFoundException('Brand not found');
+        }
         const category = await this.categoriesRepository.findOne({
             where: { id: categoryId },
         });
         if (!category) {
             throw new common_1.NotFoundException('Category not found');
         }
-        const product = this.productsRepository.create({ ...rest, category });
+        const product = this.productsRepository.create({
+            ...rest,
+            category,
+            brand,
+        });
         return this.productsRepository.save(product);
     }
     async findAllProducts() {

@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { CreateBrandDto } from './dto/create-brand.dto';
 import { UpdateBrandDto } from './dto/update-brand.dto';
 import { Brand } from './entities/brand.entity';
+import { ConflictException } from '@nestjs/common';
 @Injectable()
 export class BrandsService {
   constructor(
@@ -13,7 +14,11 @@ export class BrandsService {
     private brandsRepository: Repository<Brand>,
   ) {}
 
-  create(createBrandDto: CreateBrandDto): Promise<Brand> {
+  async create(createBrandDto: CreateBrandDto): Promise<Brand> {
+    const existing = await this.brandsRepository.findOneBy(createBrandDto);
+    if (existing) {
+      throw new ConflictException('Cette marque existe déjà.');
+    }
     const brand = this.brandsRepository.create(createBrandDto);
     return this.brandsRepository.save(brand);
   }

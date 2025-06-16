@@ -47,16 +47,17 @@ let UsersController = class UsersController {
             const token = loginResult.access_token;
             const role = loginResult.role;
             const username = loginResult.username;
+            const isProd = process.env.VERCEL === '1';
             res.cookie('oeb-token', token, {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
+                secure: isProd,
                 maxAge: 7 * 24 * 60 * 60 * 1000,
                 sameSite: 'none',
                 path: '/',
             });
             res.cookie('role', role, {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
+                secure: isProd,
                 maxAge: 7 * 24 * 60 * 60 * 1000,
                 sameSite: 'none',
                 path: '/',

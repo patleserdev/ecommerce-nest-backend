@@ -19,6 +19,7 @@ import { ConfigModule } from '@nestjs/config';
 import { HealthController } from './health.controller.js';
 import { AddressesModule } from './addresses/addresses.module';
 import { AddressRolesModule } from './address-roles/address-roles.module';
+import { LoggerCookieMiddleware } from './CookieLogger';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -63,5 +64,7 @@ export class AppModule implements NestModule {
         }),
       )
       .forRoutes('payments/webhook');
+
+    consumer.apply(LoggerCookieMiddleware).forRoutes('*'); // ou uniquement tes routes sécurisées
   }
 }

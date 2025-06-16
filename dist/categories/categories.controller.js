@@ -18,6 +18,7 @@ const categories_service_1 = require("./categories.service");
 const create_category_dto_1 = require("./dto/create-category.dto");
 const update_category_dto_1 = require("./dto/update-category.dto");
 const swagger_1 = require("@nestjs/swagger");
+const jwt_guard_1 = require("../auth/jwt/jwt.guard");
 let CategoriesController = class CategoriesController {
     categoriesService;
     constructor(categoriesService) {
@@ -47,6 +48,7 @@ let CategoriesController = class CategoriesController {
 };
 exports.CategoriesController = CategoriesController;
 __decorate([
+    (0, common_1.UseGuards)(jwt_guard_1.JwtAuthGuard),
     (0, common_1.Post)(),
     (0, swagger_1.ApiOperation)({ summary: 'Ajout catégorie' }),
     (0, swagger_1.ApiBody)({ type: create_category_dto_1.CreateCategoryDto }),
@@ -97,6 +99,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], CategoriesController.prototype, "findCategoryByParent", null);
 __decorate([
+    (0, common_1.UseGuards)(jwt_guard_1.JwtAuthGuard),
     (0, common_1.Patch)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'Modifier une catégorie' }),
     (0, swagger_1.ApiBody)({ type: update_category_dto_1.UpdateCategoryDto }),
@@ -107,6 +110,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], CategoriesController.prototype, "updateCategory", null);
 __decorate([
+    (0, common_1.UseGuards)(jwt_guard_1.JwtAuthGuard),
     (0, common_1.Delete)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'Supprimer une catégorie' }),
     __param(0, (0, common_1.Param)('id')),

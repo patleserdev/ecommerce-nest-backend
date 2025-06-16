@@ -78,7 +78,6 @@ export class UsersController {
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 jours
         // sameSite: 'lax',
         sameSite: 'none',
-
         path: '/',
       });
       res.cookie('role', role, {

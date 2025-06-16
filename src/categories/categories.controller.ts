@@ -7,17 +7,20 @@ import {
   Param,
   Delete,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { ApiTags, ApiOperation, ApiBody, ApiQuery } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/jwt/jwt.guard';
 
 @ApiTags('categories')
 @Controller('categories')
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   @ApiOperation({ summary: 'Ajout catégorie' })
   @ApiBody({ type: CreateCategoryDto })
@@ -62,6 +65,7 @@ export class CategoriesController {
     return this.categoriesService.findCategoryByParent(id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   @ApiOperation({ summary: 'Modifier une catégorie' })
   @ApiBody({ type: UpdateCategoryDto })
@@ -72,6 +76,7 @@ export class CategoriesController {
     return this.categoriesService.updateCategory(id, updateCategoryDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   @ApiOperation({ summary: 'Supprimer une catégorie' })
   removeCategory(@Param('id') id: number) {

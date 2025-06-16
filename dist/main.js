@@ -12,6 +12,7 @@ async function bootstrap() {
     app.enableCors({
         origin: process.env.URL_FRONTEND,
         credentials: true,
+        methods: ['GET', 'POST', 'PUT', 'DELETE'],
     });
     const config = new swagger_1.DocumentBuilder()
         .setTitle('E-commerce API')

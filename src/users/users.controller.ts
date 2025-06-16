@@ -73,6 +73,7 @@ export class UsersController {
 
       // Envoie le token dans un cookie HttpOnly
       res.cookie('oeb-token', token, {
+        domain: process.env.URL_BACKEND,
         httpOnly: true,
         secure: isProd, // true en prod (HTTPS)
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 jours
@@ -81,6 +82,7 @@ export class UsersController {
         path: '/',
       });
       res.cookie('role', role, {
+        domain: process.env.URL_BACKEND,
         httpOnly: true,
         secure: isProd, // true en prod (HTTPS)
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 jours

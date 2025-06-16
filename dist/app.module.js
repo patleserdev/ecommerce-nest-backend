@@ -27,6 +27,7 @@ const config_1 = require("@nestjs/config");
 const health_controller_js_1 = require("./health.controller.js");
 const addresses_module_1 = require("./addresses/addresses.module");
 const address_roles_module_1 = require("./address-roles/address-roles.module");
+const CookieLogger_1 = require("./CookieLogger");
 let AppModule = class AppModule {
     configure(consumer) {
         consumer
@@ -36,6 +37,7 @@ let AppModule = class AppModule {
             },
         }))
             .forRoutes('payments/webhook');
+        consumer.apply(CookieLogger_1.LoggerCookieMiddleware).forRoutes('*');
     }
 };
 exports.AppModule = AppModule;

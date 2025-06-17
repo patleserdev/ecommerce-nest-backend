@@ -47,19 +47,20 @@ let UsersController = class UsersController {
             const token = loginResult.access_token;
             const role = loginResult.role;
             const username = loginResult.username;
-            const isProd = process.env.VERCEL === '1';
+            const isProd = process.env.VERCEL == '1';
+            console.log('isprod', isProd);
             res.cookie('oeb-token', token, {
                 httpOnly: true,
                 secure: isProd,
                 maxAge: 7 * 24 * 60 * 60 * 1000,
-                sameSite: 'none',
+                sameSite: isProd ? 'none' : 'lax',
                 path: '/',
             });
             res.cookie('role', role, {
                 httpOnly: true,
                 secure: isProd,
                 maxAge: 7 * 24 * 60 * 60 * 1000,
-                sameSite: 'none',
+                sameSite: isProd ? 'none' : 'lax',
                 path: '/',
             });
             return { message: 'Connexion réussie', username: username };

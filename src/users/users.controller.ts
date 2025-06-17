@@ -70,10 +70,9 @@ export class UsersController {
       const role = loginResult.role;
       const username = loginResult.username;
       const isProd = process.env.VERCEL == '1'; // ou ta propre variable d'env
-
+      console.log('isprod', isProd);
       // Envoie le token dans un cookie HttpOnly
       res.cookie('oeb-token', token, {
-        domain: 'ecommerce-nest-backend-rouge.vercel.app',
         httpOnly: true,
         secure: isProd, // true en prod (HTTPS)
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 jours
@@ -82,7 +81,6 @@ export class UsersController {
         path: '/',
       });
       res.cookie('role', role, {
-        domain: 'ecommerce-nest-backend-rouge.vercel.app',
         httpOnly: true,
         secure: isProd, // true en prod (HTTPS)
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 jours

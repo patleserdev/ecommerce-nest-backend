@@ -3,7 +3,8 @@ import {
   Column,
   PrimaryGeneratedColumn,
   OneToMany,
-  Unique,
+  CreateDateColumn,
+  UpdateDateColumn,
   BeforeInsert,
   BeforeUpdate,
 } from 'typeorm';
@@ -14,6 +15,12 @@ import slugify from 'slugify';
 export class Brand {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @CreateDateColumn({ type: 'timestamp' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: 'timestamp' })
+  updatedAt: Date;
 
   @Column({ unique: true })
   name: string;

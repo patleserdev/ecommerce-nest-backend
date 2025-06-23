@@ -15,7 +15,7 @@ const address_entity_1 = require("../../addresses/entities/address.entity");
 const user_entity_1 = require("../../users/entities/user.entity");
 const cart_entities_1 = require("../../cart/entities/cart.entities");
 const order_entity_1 = require("../../orders/entities/order.entity");
-const create_address_role_dto_js_1 = require("../dto/create-address-role.dto.js");
+const create_address_role_dto_1 = require("../dto/create-address-role.dto");
 let AdressRole = class AdressRole {
     id;
     type;

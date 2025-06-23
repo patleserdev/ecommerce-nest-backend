@@ -16,6 +16,8 @@ const product_entity_1 = require("../../products/entities/product.entity");
 const address_role_entity_1 = require("../../address-roles/entities/address-role.entity");
 let Cart = class Cart {
     id;
+    createdAt;
+    updatedAt;
     user;
     items;
     adresses;
@@ -25,6 +27,14 @@ __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
 ], Cart.prototype, "id", void 0);
+__decorate([
+    (0, typeorm_1.CreateDateColumn)({ type: 'timestamp' }),
+    __metadata("design:type", Date)
+], Cart.prototype, "createdAt", void 0);
+__decorate([
+    (0, typeorm_1.UpdateDateColumn)({ type: 'timestamp' }),
+    __metadata("design:type", Date)
+], Cart.prototype, "updatedAt", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => user_entity_1.User, (user) => user.carts),
     __metadata("design:type", user_entity_1.User)

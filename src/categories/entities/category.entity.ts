@@ -6,6 +6,8 @@ import {
   Unique,
   BeforeInsert,
   BeforeUpdate,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Product } from '../../products/entities/product.entity';
 import slugify from 'slugify';
@@ -14,6 +16,12 @@ import slugify from 'slugify';
 export class Category {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @CreateDateColumn({ type: 'timestamp' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: 'timestamp' })
+  updatedAt: Date;
 
   @Column()
   name: string;

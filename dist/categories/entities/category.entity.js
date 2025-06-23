@@ -15,6 +15,8 @@ const product_entity_1 = require("../../products/entities/product.entity");
 const slugify_1 = require("slugify");
 let Category = class Category {
     id;
+    createdAt;
+    updatedAt;
     name;
     slug;
     parent_id;
@@ -30,6 +32,14 @@ __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
 ], Category.prototype, "id", void 0);
+__decorate([
+    (0, typeorm_1.CreateDateColumn)({ type: 'timestamp' }),
+    __metadata("design:type", Date)
+], Category.prototype, "createdAt", void 0);
+__decorate([
+    (0, typeorm_1.UpdateDateColumn)({ type: 'timestamp' }),
+    __metadata("design:type", Date)
+], Category.prototype, "updatedAt", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)

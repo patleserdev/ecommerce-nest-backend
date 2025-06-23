@@ -101,6 +101,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], AddressesController.prototype, "findAllByUser", null);
 __decorate([
+    (0, common_1.UseGuards)(jwt_guard_1.JwtAuthGuard),
     (0, common_1.Patch)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
@@ -109,6 +110,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], AddressesController.prototype, "update", null);
 __decorate([
+    (0, common_1.UseGuards)(jwt_guard_1.JwtAuthGuard),
     (0, common_1.Delete)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),

@@ -20,6 +20,7 @@ let Order = class Order {
     status;
     total;
     createdAt;
+    updatedAt;
     items;
     adresses;
 };
@@ -41,9 +42,13 @@ __decorate([
     __metadata("design:type", Number)
 ], Order.prototype, "total", void 0);
 __decorate([
-    (0, typeorm_1.CreateDateColumn)(),
+    (0, typeorm_1.CreateDateColumn)({ type: 'timestamp' }),
     __metadata("design:type", Date)
 ], Order.prototype, "createdAt", void 0);
+__decorate([
+    (0, typeorm_1.UpdateDateColumn)({ type: 'timestamp' }),
+    __metadata("design:type", Date)
+], Order.prototype, "updatedAt", void 0);
 __decorate([
     (0, typeorm_1.OneToMany)(() => OrderItem, (orderItem) => orderItem.order, { cascade: true }),
     __metadata("design:type", Array)

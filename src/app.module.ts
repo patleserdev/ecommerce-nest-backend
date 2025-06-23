@@ -20,6 +20,9 @@ import { HealthController } from './health.controller.js';
 import { AddressesModule } from './addresses/addresses.module';
 import { AddressRolesModule } from './address-roles/address-roles.module';
 import { LoggerCookieMiddleware } from './CookieLogger';
+import { MediasModule } from './medias/medias.module';
+import { MediaLinksModule } from './media-links/media-links.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -49,6 +52,9 @@ import { LoggerCookieMiddleware } from './CookieLogger';
     BrandsModule,
     AddressesModule,
     AddressRolesModule,
+    MediasModule,
+    MediaLinksModule,
+    CloudinaryModule,
   ],
   controllers: [AppController, HealthController],
   providers: [AppService, PaymentsService],

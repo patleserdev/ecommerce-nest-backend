@@ -11,6 +11,8 @@ import { Product } from './products/entities/product.entity';
 import { User } from './users/entities/user.entity';
 import { Adress } from './addresses/entities/address.entity';
 import { AdressRole } from './address-roles/entities/address-role.entity';
+import { Media } from './medias/entities/media.entity';
+import { MediaLink } from './media-links/entities/media-link.entity';
 export const AppDataSource = new DataSource({
   type: 'mysql',
   host: 'localhost',
@@ -32,6 +34,8 @@ export const AppDataSource = new DataSource({
     User,
     Adress,
     AdressRole,
+    Media,
+    MediaLink,
   ], // ajoute ici toutes tes entités
 
   migrations: ['src/migrations/*.ts'],

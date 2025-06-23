@@ -28,6 +28,9 @@ const health_controller_js_1 = require("./health.controller.js");
 const addresses_module_1 = require("./addresses/addresses.module");
 const address_roles_module_1 = require("./address-roles/address-roles.module");
 const CookieLogger_1 = require("./CookieLogger");
+const medias_module_1 = require("./medias/medias.module");
+const media_links_module_1 = require("./media-links/media-links.module");
+const cloudinary_module_1 = require("./cloudinary/cloudinary.module");
 let AppModule = class AppModule {
     configure(consumer) {
         consumer
@@ -71,6 +74,9 @@ exports.AppModule = AppModule = __decorate([
             brands_module_1.BrandsModule,
             addresses_module_1.AddressesModule,
             address_roles_module_1.AddressRolesModule,
+            medias_module_1.MediasModule,
+            media_links_module_1.MediaLinksModule,
+            cloudinary_module_1.CloudinaryModule,
         ],
         controllers: [app_controller_1.AppController, health_controller_js_1.HealthController],
         providers: [app_service_1.AppService, payments_service_js_1.PaymentsService],

@@ -12,7 +12,7 @@ import { User } from '../../users/entities/user.entity';
 import { Cart } from '../../cart/entities/cart.entities';
 import { Order } from '../../orders/entities/order.entity';
 import { Invoice } from '../../invoices/entities/invoice.entity';
-import { AdressRoleType } from '../dto/create-address-role.dto.js';
+import { AdressRoleType } from '../dto/create-address-role.dto';
 
 @Entity()
 export class AdressRole {

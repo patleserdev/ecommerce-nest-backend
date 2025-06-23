@@ -4,6 +4,8 @@ import { ProductVariation } from '../../product-variations/entities/product-vari
 import { Brand } from '../../brands/entities/brand.entity';
 export declare class Product {
     id: number;
+    createdAt: Date;
+    updatedAt: Date;
     name: string;
     slug: string;
     description: string;

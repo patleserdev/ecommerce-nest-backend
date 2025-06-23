@@ -3,6 +3,8 @@ import { Product } from '../../products/entities/product.entity';
 import { AdressRole } from 'src/address-roles/entities/address-role.entity';
 export declare class Cart {
     id: number;
+    createdAt: Date;
+    updatedAt: Date;
     user: User;
     items: CartItem[];
     adresses: AdressRole[];

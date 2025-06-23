@@ -13,6 +13,8 @@ const product_entity_1 = require("./products/entities/product.entity");
 const user_entity_1 = require("./users/entities/user.entity");
 const address_entity_1 = require("./addresses/entities/address.entity");
 const address_role_entity_1 = require("./address-roles/entities/address-role.entity");
+const media_entity_1 = require("./medias/entities/media.entity");
+const media_link_entity_1 = require("./media-links/entities/media-link.entity");
 exports.AppDataSource = new typeorm_1.DataSource({
     type: 'mysql',
     host: 'localhost',
@@ -34,6 +36,8 @@ exports.AppDataSource = new typeorm_1.DataSource({
         user_entity_1.User,
         address_entity_1.Adress,
         address_role_entity_1.AdressRole,
+        media_entity_1.Media,
+        media_link_entity_1.MediaLink,
     ],
     migrations: ['src/migrations/*.ts'],
     synchronize: false,

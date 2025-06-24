@@ -13,10 +13,11 @@ export class CloudinaryService {
     });
   }
   async uploadFile(
-    file: Express.Multer.File,
+    // file: Express.Multer.File,
+    buffer: Buffer,
   ): Promise<{ publicId: string; url: string }> {
     // 🧠 Récupération des dimensions avec sharp
-    const metadata = await sharp(file.buffer).metadata();
+    const metadata = await sharp(buffer).metadata();
     const width = metadata.width || 800;
     const height = metadata.height || 800;
 
@@ -43,10 +44,11 @@ export class CloudinaryService {
         },
       );
 
-      const bufferStream = new Readable();
-      bufferStream.push(file.buffer);
-      bufferStream.push(null);
-      bufferStream.pipe(uploadStream);
+      // const bufferStream = new Readable();
+      // bufferStream.push(file.buffer);
+      // bufferStream.push(null);
+      // bufferStream.pipe(uploadStream);
+      Readable.from(buffer).pipe(uploadStream);
     });
   }
 

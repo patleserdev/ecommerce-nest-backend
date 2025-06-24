@@ -42,8 +42,14 @@ export class MediasController {
     // enregistrer
     if (!file) throw new Error('File is required');
 
+    // je réduis tout ce qui dépasse 25mpixels
+    const resizedBuffer = await sharp(file.buffer)
+      .resize({ width: 5000, height: 5000, fit: 'inside' }) // ou une autre limite raisonnable
+      .toBuffer();
+
     // Upload to Cloudinary
-    const { publicId, url } = await this.cloudinaryService.uploadFile(file);
+    const { publicId, url } =
+      await this.cloudinaryService.uploadFile(resizedBuffer);
     const metadata = await sharp(file.buffer).metadata();
     const width = metadata.width || 800;
     const height = metadata.height || 800;

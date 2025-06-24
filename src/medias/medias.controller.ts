@@ -47,12 +47,14 @@ export class MediasController {
     const metadata = await sharp(file.buffer).metadata();
     const width = metadata.width || 800;
     const height = metadata.height || 800;
+    const format = metadata.format; // ex: 'jpeg'
+    const mimeType = `image/${format}`;
     // Prépare les données à enregistrer (ajoute url et publicId)
     const mediaData = {
       ...body,
       url: url,
       pictureId: publicId,
-      mimetype: file.mimetype,
+      mimetype: mimeType,
       size: file.size,
       altText: file.originalname,
       fileName: file.originalname,

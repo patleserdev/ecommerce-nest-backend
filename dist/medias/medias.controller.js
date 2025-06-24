@@ -29,15 +29,20 @@ let MediasController = class MediasController {
     async create(file, body) {
         if (!file)
             throw new Error('File is required');
-        const { publicId, url } = await this.cloudinaryService.uploadFile(file);
+        const resizedBuffer = await sharp(file.buffer)
+            .resize({ width: 5000, height: 5000, fit: 'inside' })
+            .toBuffer();
+        const { publicId, url } = await this.cloudinaryService.uploadFile(resizedBuffer);
         const metadata = await sharp(file.buffer).metadata();
         const width = metadata.width || 800;
         const height = metadata.height || 800;
+        const format = metadata.format;
+        const mimeType = `image/${format}`;
         const mediaData = {
             ...body,
             url: url,
             pictureId: publicId,
-            mimetype: file.mimetype,
+            mimetype: mimeType,
             size: file.size,
             altText: file.originalname,
             fileName: file.originalname,
@@ -62,7 +67,10 @@ let MediasController = class MediasController {
             console.log(media.fileName, file.filename);
             if (media.fileName != file.filename) {
                 await this.cloudinaryService.deleteFile(media.pictureId);
-                const { publicId, url } = await this.cloudinaryService.uploadFile(file);
+                const resizedBuffer = await sharp(file.buffer)
+                    .resize({ width: 5000, height: 5000, fit: 'inside' })
+                    .toBuffer();
+                const { publicId, url } = await this.cloudinaryService.uploadFile(resizedBuffer);
                 const metadata = await sharp(file.buffer).metadata();
                 const tmpWidth = metadata.width || 800;
                 const tmpHeight = metadata.height || 800;

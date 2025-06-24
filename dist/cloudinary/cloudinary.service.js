@@ -22,8 +22,8 @@ let CloudinaryService = class CloudinaryService {
             api_secret: process.env.CLOUDINARY_API_SECRET,
         });
     }
-    async uploadFile(file) {
-        const metadata = await sharp(file.buffer).metadata();
+    async uploadFile(buffer) {
+        const metadata = await sharp(buffer).metadata();
         const width = metadata.width || 800;
         const height = metadata.height || 800;
         return new Promise((resolve, reject) => {
@@ -46,10 +46,7 @@ let CloudinaryService = class CloudinaryService {
                     url: result.secure_url,
                 });
             });
-            const bufferStream = new stream_1.Readable();
-            bufferStream.push(file.buffer);
-            bufferStream.push(null);
-            bufferStream.pipe(uploadStream);
+            stream_1.Readable.from(buffer).pipe(uploadStream);
         });
     }
     async deleteFile(publicId) {

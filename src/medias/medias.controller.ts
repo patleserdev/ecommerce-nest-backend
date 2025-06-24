@@ -114,7 +114,12 @@ export class MediasController {
       if (media.fileName != file.filename) {
         // si le filename est différent , je supprime l'image précédente dans cloudinary et je crée la nouvelle,
         await this.cloudinaryService.deleteFile(media.pictureId);
-        const { publicId, url } = await this.cloudinaryService.uploadFile(file);
+        const resizedBuffer = await sharp(file.buffer)
+          .resize({ width: 5000, height: 5000, fit: 'inside' }) // ou une autre limite raisonnable
+          .toBuffer();
+
+        const { publicId, url } =
+          await this.cloudinaryService.uploadFile(resizedBuffer);
         const metadata = await sharp(file.buffer).metadata();
         const tmpWidth = metadata.width || 800;
         const tmpHeight = metadata.height || 800;

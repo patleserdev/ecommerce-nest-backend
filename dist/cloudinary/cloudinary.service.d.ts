@@ -1,6 +1,6 @@
 export declare class CloudinaryService {
     constructor();
-    uploadFile(file: Express.Multer.File): Promise<{
+    uploadFile(buffer: Buffer): Promise<{
         publicId: string;
         url: string;
     }>;

@@ -22,7 +22,7 @@ export class Media {
   @Column()
   pictureId: string;
 
-  @Column()
+  @Column({ nullable: true })
   mimeType: string;
 
   @Column({ nullable: true })

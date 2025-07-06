@@ -14,11 +14,15 @@ async function bootstrap() {
 
   app.use(cookieParser());
   app.enableCors({
-    origin: function (origin, callback) {
+    origin: (
+      origin: string | undefined,
+      callback: (err: Error | null, allow?: boolean) => void,
+    ) => {
+      // Autorise les requêtes sans origin (comme Postman ou SSR)
       if (!origin || whitelist.includes(origin)) {
         callback(null, true);
       } else {
-        callback(new Error('Not allowed by CORS'));
+        callback(new Error(`CORS error: origin '${origin}' not allowed.`));
       }
     },
     credentials: true,

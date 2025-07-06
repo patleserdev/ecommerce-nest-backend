@@ -8,9 +8,17 @@ async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule, {
         logger: ['log', 'error', 'warn', 'debug', 'verbose'],
     });
+    const whitelist = process.env.URL_FRONTEND?.split(',').map((url) => url.trim()) || [];
     app.use(cookieParser());
     app.enableCors({
-        origin: [process.env.URL_FRONTEND],
+        origin: function (origin, callback) {
+            if (!origin || whitelist.includes(origin)) {
+                callback(null, true);
+            }
+            else {
+                callback(new Error('Not allowed by CORS'));
+            }
+        },
         credentials: true,
         methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     });

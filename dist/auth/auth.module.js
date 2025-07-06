@@ -14,7 +14,11 @@ const auth_service_1 = require("./auth.service");
 const users_module_1 = require("../users/users.module");
 const jwt_strategy_1 = require("../auth/jwt/jwt.strategy");
 const config_1 = require("@nestjs/config");
+const jwt_refresh_middleware_1 = require("./middleware/jwt-refresh.middleware");
 let AuthModule = class AuthModule {
+    configure(consumer) {
+        consumer.apply(jwt_refresh_middleware_1.JwtRefreshMiddleware).forRoutes('*');
+    }
 };
 exports.AuthModule = AuthModule;
 exports.AuthModule = AuthModule = __decorate([

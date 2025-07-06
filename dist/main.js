@@ -10,7 +10,7 @@ async function bootstrap() {
     });
     app.use(cookieParser());
     app.enableCors({
-        origin: process.env.URL_FRONTEND,
+        origin: [process.env.URL_FRONTEND],
         credentials: true,
         methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     });

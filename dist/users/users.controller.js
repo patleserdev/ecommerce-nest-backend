@@ -58,7 +58,7 @@ let UsersController = class UsersController {
             res.cookie('role', role, {
                 httpOnly: true,
                 secure: isProd,
-                maxAge: 7 * 24 * 60 * 60 * 1000,
+                maxAge: 24 * 60 * 60 * 1000,
                 sameSite: isProd ? 'none' : 'lax',
                 path: '/',
             });
@@ -70,6 +70,9 @@ let UsersController = class UsersController {
                 .status(401)
                 .json({ message: 'Email ou mot de passe incorrect' });
         }
+    }
+    check(req) {
+        return true;
     }
     getProfile(req) {
         return req.user;
@@ -137,6 +140,14 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "login", null);
+__decorate([
+    (0, common_1.UseGuards)(jwt_guard_1.JwtAuthGuard),
+    (0, common_1.Get)('check'),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], UsersController.prototype, "check", null);
 __decorate([
     (0, common_1.UseGuards)(jwt_guard_1.JwtAuthGuard),
     (0, swagger_1.ApiOperation)({ summary: 'Récupérer la photo de profil' }),

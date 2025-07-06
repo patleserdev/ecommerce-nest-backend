@@ -48,6 +48,7 @@ let CategoriesService = class CategoriesService {
             }
             const category = await this.categoriesRepository.findOne({
                 where: { slug: slug, parent_id: parentCategory.id },
+                relations: ['products'],
             });
             if (!category) {
                 throw new common_1.NotFoundException('Category not found with specified parent');
@@ -57,6 +58,7 @@ let CategoriesService = class CategoriesService {
         else {
             const category = await this.categoriesRepository.findOne({
                 where: { slug: slug },
+                relations: ['products'],
             });
             if (!category) {
                 throw new common_1.NotFoundException('Category not found without parent');

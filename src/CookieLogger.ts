@@ -5,6 +5,7 @@ import { Request, Response, NextFunction } from 'express';
 export class LoggerCookieMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction) {
     console.log('Cookies reçus:', req.cookies);
+    console.log(`[${req.method}] ${req.originalUrl}`);
     next();
   }
 }

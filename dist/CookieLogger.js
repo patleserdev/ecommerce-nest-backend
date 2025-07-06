@@ -11,6 +11,7 @@ const common_1 = require("@nestjs/common");
 let LoggerCookieMiddleware = class LoggerCookieMiddleware {
     use(req, res, next) {
         console.log('Cookies reçus:', req.cookies);
+        console.log(`[${req.method}] ${req.originalUrl}`);
         next();
     }
 };

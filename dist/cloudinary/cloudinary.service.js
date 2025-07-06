@@ -26,6 +26,7 @@ let CloudinaryService = class CloudinaryService {
         const metadata = await sharp(buffer).metadata();
         const width = metadata.width || 800;
         const height = metadata.height || 800;
+        console.log(metadata.size);
         return new Promise((resolve, reject) => {
             const uploadStream = cloudinary_1.v2.uploader.upload_stream({
                 folder: 'ecommerce',

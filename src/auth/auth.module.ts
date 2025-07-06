@@ -1,10 +1,11 @@
-import { Module, forwardRef } from '@nestjs/common';
+import { Module, forwardRef, MiddlewareConsumer } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { UsersModule } from '../users/users.module';
 import { JwtStrategy } from '../auth/jwt/jwt.strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtRefreshMiddleware } from './middleware/jwt-refresh.middleware';
 @Module({
   imports: [
     forwardRef(() => UsersModule),
@@ -22,4 +23,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
   providers: [AuthService, JwtStrategy],
   exports: [AuthService],
 })
-export class AuthModule {}
+export class AuthModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(JwtRefreshMiddleware).forRoutes('*'); // 🔁 Toutes les routes
+  }
+}

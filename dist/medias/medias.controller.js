@@ -30,7 +30,8 @@ let MediasController = class MediasController {
         if (!file)
             throw new Error('File is required');
         const resizedBuffer = await sharp(file.buffer)
-            .resize({ width: 5000, height: 5000, fit: 'inside' })
+            .resize({ width: 3000, height: 3000, fit: 'inside' })
+            .jpeg({ quality: 80 })
             .toBuffer();
         const { publicId, url } = await this.cloudinaryService.uploadFile(resizedBuffer);
         const metadata = await sharp(file.buffer).metadata();
@@ -100,7 +101,6 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], MediasController.prototype, "create", null);
 __decorate([
-    (0, common_1.UseGuards)(jwt_guard_1.JwtAuthGuard),
     (0, common_1.Get)(),
     __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
@@ -108,7 +108,6 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], MediasController.prototype, "findAll", null);
 __decorate([
-    (0, common_1.UseGuards)(jwt_guard_1.JwtAuthGuard),
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),

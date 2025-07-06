@@ -50,6 +50,7 @@ export class CategoriesService {
 
       const category = await this.categoriesRepository.findOne({
         where: { slug: slug, parent_id: parentCategory.id },
+        relations: ['products'],
       });
 
       if (!category) {
@@ -60,6 +61,7 @@ export class CategoriesService {
     } else {
       const category = await this.categoriesRepository.findOne({
         where: { slug: slug },
+        relations: ['products'],
       });
 
       if (!category) {

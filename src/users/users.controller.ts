@@ -83,7 +83,8 @@ export class UsersController {
       res.cookie('role', role, {
         httpOnly: true,
         secure: isProd, // true en prod (HTTPS)
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 jours
+        // maxAge: 7 * 24 * 60 * 60 * 1000, // 7 jours
+        maxAge: 24 * 60 * 60 * 1000, // ✅ 1 jour
         sameSite: isProd ? 'none' : 'lax',
         path: '/',
       });
@@ -95,6 +96,13 @@ export class UsersController {
         .status(401)
         .json({ message: 'Email ou mot de passe incorrect' });
     }
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('check')
+  check(@Req() req: Request) {
+    // Si on arrive ici, le token est valide
+    return true;
   }
 
   @UseGuards(JwtAuthGuard)

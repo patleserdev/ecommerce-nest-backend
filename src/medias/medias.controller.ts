@@ -19,6 +19,7 @@ import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import * as sharp from 'sharp';
 import { JwtAuthGuard } from '../auth/jwt/jwt.guard';
 import { JwtUserPayload } from '../auth/jwt/jwt-user-payload';
+
 // file typé dans types/file.d.ts
 
 @Controller('medias')
@@ -44,18 +45,23 @@ export class MediasController {
 
     // je réduis tout ce qui dépasse 25mpixels
     const resizedBuffer = await sharp(file.buffer)
-      .resize({ width: 5000, height: 5000, fit: 'inside' }) // ou une autre limite raisonnable
+      .resize({ width: 3000, height: 3000, fit: 'inside' }) // ou une autre limite raisonnable
+      .jpeg({ quality: 80 })
       .toBuffer();
 
+    // console.log('metadatatest', metadatatest.size);
+    // console.log('filesize', file.size);
     // Upload to Cloudinary
     const { publicId, url } =
       await this.cloudinaryService.uploadFile(resizedBuffer);
+
     const metadata = await sharp(file.buffer).metadata();
     const width = metadata.width || 800;
     const height = metadata.height || 800;
     const format = metadata.format; // ex: 'jpeg'
     const mimeType = `image/${format}`;
     // Prépare les données à enregistrer (ajoute url et publicId)
+
     const mediaData = {
       ...body,
       url: url,
@@ -71,7 +77,6 @@ export class MediasController {
     return this.mediasService.create(mediaData);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get()
   findAll(@Req() req: Request & { user: JwtUserPayload }) {
     console.log('Authenticated user:', req.user); // assure-toi que c’est bien loggé
@@ -79,7 +84,6 @@ export class MediasController {
     return this.mediasService.findAll();
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.mediasService.findOne(id);

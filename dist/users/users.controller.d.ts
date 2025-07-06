@@ -25,6 +25,7 @@ export declare class UsersController {
         message: string;
         username: string;
     }>;
+    check(req: Request): boolean;
     getProfile(req: Request): UserPayload | undefined;
     updateProfile(req: Request, updateUserDto: UpdateUserDto): Promise<import("./entities/user.entity").User>;
     deleteProfile(req: Request): Promise<void>;

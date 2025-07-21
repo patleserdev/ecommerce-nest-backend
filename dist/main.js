@@ -11,12 +11,12 @@ async function bootstrap() {
     const whitelist = process.env.URL_FRONTEND?.split(',').map((url) => url.trim()) || [];
     app.use(cookieParser());
     app.enableCors({
-        origin: function (origin, callback) {
+        origin: (origin, callback) => {
             if (!origin || whitelist.includes(origin)) {
                 callback(null, true);
             }
             else {
-                callback(new Error('Not allowed by CORS'));
+                callback(new Error(`CORS error: origin '${origin}' not allowed.`));
             }
         },
         credentials: true,

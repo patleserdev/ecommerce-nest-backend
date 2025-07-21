@@ -72,7 +72,7 @@ let UsersController = class UsersController {
         }
     }
     check(req) {
-        return true;
+        return req.user;
     }
     getProfile(req) {
         return req.user;

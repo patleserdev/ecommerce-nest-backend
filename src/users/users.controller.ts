@@ -102,7 +102,7 @@ export class UsersController {
   @Get('check')
   check(@Req() req: Request) {
     // Si on arrive ici, le token est valide
-    return true;
+    return req.user as UserPayload | undefined;
   }
 
   @UseGuards(JwtAuthGuard)

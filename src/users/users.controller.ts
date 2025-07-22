@@ -40,12 +40,9 @@ export class UsersController {
   @Get('me')
   getMe(@Req() req: Request) {
     // req.user est défini par JwtStrategy.validate()
-    const user = req.user as UserPayload;
+    // const user = req.user as UserPayload;
 
-    return {
-      id: user.id,
-      email: user.email,
-    };
+    return req.user as UserPayload | undefined;
   }
 
   @ApiOperation({ summary: 'Inscription utilisateur' })
@@ -91,10 +88,12 @@ export class UsersController {
 
       return { message: 'Connexion réussie', username: username };
     } catch (error) {
+      // console.error('Erreur de connexion:', error);
+      // return res
+      //   .status(401)
+      //   .json({ message: 'Email ou mot de passe incorrect' });
       console.error('Erreur de connexion:', error);
-      return res
-        .status(401)
-        .json({ message: 'Email ou mot de passe incorrect' });
+      throw new UnauthorizedException('Email ou mot de passe incorrect');
     }
   }
 

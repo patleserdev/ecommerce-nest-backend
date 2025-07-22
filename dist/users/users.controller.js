@@ -31,11 +31,7 @@ let UsersController = class UsersController {
         this.authService = authService;
     }
     getMe(req) {
-        const user = req.user;
-        return {
-            id: user.id,
-            email: user.email,
-        };
+        return req.user;
     }
     async register(createUserDto) {
         return this.usersService.create(createUserDto);
@@ -66,9 +62,7 @@ let UsersController = class UsersController {
         }
         catch (error) {
             console.error('Erreur de connexion:', error);
-            return res
-                .status(401)
-                .json({ message: 'Email ou mot de passe incorrect' });
+            throw new common_2.UnauthorizedException('Email ou mot de passe incorrect');
         }
     }
     check(req) {

@@ -26,7 +26,7 @@ let BrandsController = class BrandsController {
         return this.brandsService.create(createBrandDto);
     }
     findAll() {
-        return this.brandsService.findAll();
+        return this.brandsService.findAllWithMedias();
     }
     findOne(id) {
         return this.brandsService.findBrandById(id);

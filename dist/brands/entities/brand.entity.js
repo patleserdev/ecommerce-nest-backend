@@ -13,6 +13,7 @@ exports.Brand = void 0;
 const typeorm_1 = require("typeorm");
 const product_entity_1 = require("../../products/entities/product.entity");
 const slugify_1 = require("slugify");
+const media_link_entity_js_1 = require("../../media-links/entities/media-link.entity.js");
 let Brand = class Brand {
     id;
     createdAt;
@@ -20,6 +21,7 @@ let Brand = class Brand {
     name;
     slug;
     products;
+    mediaLinks;
     generateSlug() {
         if (this.name) {
             this.slug = (0, slugify_1.default)(this.name, { lower: true, strict: true });
@@ -51,6 +53,10 @@ __decorate([
     (0, typeorm_1.OneToMany)(() => product_entity_1.Product, (product) => product.brand),
     __metadata("design:type", Array)
 ], Brand.prototype, "products", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => media_link_entity_js_1.MediaLink, (mediaLink) => mediaLink.brand),
+    __metadata("design:type", Array)
+], Brand.prototype, "mediaLinks", void 0);
 __decorate([
     (0, typeorm_1.BeforeInsert)(),
     (0, typeorm_1.BeforeUpdate)(),

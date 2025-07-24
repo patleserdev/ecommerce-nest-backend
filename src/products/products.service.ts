@@ -68,7 +68,9 @@ export class ProductsService {
   }
 
   async findAllWithMedias() {
-    const products = await this.productsRepository.find(); // ou with relations
+    const products = await this.productsRepository.find({
+      relations: ['category', 'variations', 'brand'],
+    }); // ou with relations
 
     const allLinks = await this.mediaLinksRepository.find({
       where: { linkedType: 'product' },

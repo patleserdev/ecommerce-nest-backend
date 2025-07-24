@@ -18,10 +18,13 @@ const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const brand_entity_1 = require("./entities/brand.entity");
 const common_2 = require("@nestjs/common");
+const media_link_entity_1 = require("../media-links/entities/media-link.entity");
 let BrandsService = class BrandsService {
     brandsRepository;
-    constructor(brandsRepository) {
+    mediaLinksRepository;
+    constructor(brandsRepository, mediaLinksRepository) {
         this.brandsRepository = brandsRepository;
+        this.mediaLinksRepository = mediaLinksRepository;
     }
     async create(createBrandDto) {
         const existing = await this.brandsRepository.findOneBy(createBrandDto);
@@ -33,6 +36,36 @@ let BrandsService = class BrandsService {
     }
     findAll() {
         return this.brandsRepository.find({ relations: ['products'] });
+    }
+    async findAllWithMedias() {
+        const brands = await this.brandsRepository.find({
+            relations: ['products'],
+        });
+        const allLinks = await this.mediaLinksRepository.find({
+            where: { linkedType: 'brand' },
+            relations: ['media'],
+        });
+        const brandMap = new Map();
+        for (const brand of brands) {
+            brandMap.set(brand.id, { ...brand, medias: [] });
+        }
+        for (const link of allLinks) {
+            const brand = brandMap.get(link.linkedId);
+            if (brand) {
+                brand.medias.push({
+                    id: link.media.id,
+                    url: link.media.url,
+                    altText: link.media.altText,
+                    description: link.media.description,
+                    title: link.media.title,
+                    role: link.role,
+                    position: link.position,
+                    height: link.media.height,
+                    width: link.media.width,
+                });
+            }
+        }
+        return Array.from(brandMap.values());
     }
     async findBrandById(id) {
         const category = await this.brandsRepository.findOne({
@@ -59,6 +92,8 @@ exports.BrandsService = BrandsService;
 exports.BrandsService = BrandsService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(brand_entity_1.Brand)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __param(1, (0, typeorm_1.InjectRepository)(media_link_entity_1.MediaLink)),
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        typeorm_2.Repository])
 ], BrandsService);
 //# sourceMappingURL=brands.service.js.map

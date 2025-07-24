@@ -12,15 +12,19 @@ const brands_service_1 = require("./brands.service");
 const brands_controller_1 = require("./brands.controller");
 const typeorm_1 = require("@nestjs/typeorm");
 const brand_entity_1 = require("../brands/entities/brand.entity");
+const media_link_entity_1 = require("../media-links/entities/media-link.entity");
 let BrandsModule = class BrandsModule {
 };
 exports.BrandsModule = BrandsModule;
 exports.BrandsModule = BrandsModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([brand_entity_1.Brand])],
+        imports: [
+            typeorm_1.TypeOrmModule.forFeature([brand_entity_1.Brand]),
+            typeorm_1.TypeOrmModule.forFeature([media_link_entity_1.MediaLink]),
+        ],
         controllers: [brands_controller_1.BrandsController],
         providers: [brands_service_1.BrandsService],
-        exports: [brands_service_1.BrandsService, typeorm_1.TypeOrmModule.forFeature([brand_entity_1.Brand])],
+        exports: [brands_service_1.BrandsService],
     })
 ], BrandsModule);
 //# sourceMappingURL=brands.module.js.map

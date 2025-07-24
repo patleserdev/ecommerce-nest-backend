@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { Product } from '../../products/entities/product.entity';
 import slugify from 'slugify';
+import { MediaLink } from '../../media-links/entities/media-link.entity.js';
 
 @Entity()
 export class Brand {
@@ -30,6 +31,9 @@ export class Brand {
 
   @OneToMany(() => Product, (product) => product.brand)
   products: Product[];
+
+  @OneToMany(() => MediaLink, (mediaLink) => mediaLink.brand)
+  mediaLinks: MediaLink[];
 
   @BeforeInsert()
   @BeforeUpdate()

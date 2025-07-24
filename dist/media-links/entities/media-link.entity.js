@@ -13,12 +13,16 @@ exports.MediaLink = void 0;
 const typeorm_1 = require("typeorm");
 const media_entity_1 = require("../../medias/entities/media.entity");
 const product_entity_1 = require("../../products/entities/product.entity");
+const brand_entity_1 = require("../../brands/entities/brand.entity");
+const category_entity_1 = require("../../categories/entities/category.entity");
 let MediaLink = class MediaLink {
     id;
     mediaId;
     media;
     linkedType;
     product;
+    brand;
+    category;
     linkedId;
     role;
     position;
@@ -47,6 +51,18 @@ __decorate([
     (0, typeorm_1.JoinColumn)({ name: 'linkedId' }),
     __metadata("design:type", product_entity_1.Product)
 ], MediaLink.prototype, "product", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => brand_entity_1.Brand, (brand) => brand.mediaLinks, { nullable: true }),
+    (0, typeorm_1.JoinColumn)({ name: 'linkedId' }),
+    __metadata("design:type", brand_entity_1.Brand)
+], MediaLink.prototype, "brand", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => category_entity_1.Category, (category) => category.mediaLinks, {
+        nullable: true,
+    }),
+    (0, typeorm_1.JoinColumn)({ name: 'linkedId' }),
+    __metadata("design:type", category_entity_1.Category)
+], MediaLink.prototype, "category", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Number)

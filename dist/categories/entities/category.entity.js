@@ -13,6 +13,7 @@ exports.Category = void 0;
 const typeorm_1 = require("typeorm");
 const product_entity_1 = require("../../products/entities/product.entity");
 const slugify_1 = require("slugify");
+const media_link_entity_1 = require("../../media-links/entities/media-link.entity");
 let Category = class Category {
     id;
     createdAt;
@@ -21,6 +22,7 @@ let Category = class Category {
     slug;
     parent_id;
     products;
+    mediaLinks;
     generateSlug() {
         if (this.name) {
             this.slug = (0, slugify_1.default)(this.name, { lower: true, strict: true });
@@ -57,6 +59,10 @@ __decorate([
     (0, typeorm_1.OneToMany)(() => product_entity_1.Product, (product) => product.category),
     __metadata("design:type", Array)
 ], Category.prototype, "products", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => media_link_entity_1.MediaLink, (mediaLink) => mediaLink.category),
+    __metadata("design:type", Array)
+], Category.prototype, "mediaLinks", void 0);
 __decorate([
     (0, typeorm_1.BeforeInsert)(),
     (0, typeorm_1.BeforeUpdate)(),

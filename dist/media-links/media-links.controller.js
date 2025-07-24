@@ -36,7 +36,6 @@ let MediaLinksController = class MediaLinksController {
         return this.mediaLinksService.update(id, updateMediaLinkDto);
     }
     async removeByLinkedAndMediaId(linkedId, mediaId) {
-        console.log('bonne route');
         if (!linkedId || !mediaId) {
             throw new common_2.NotFoundException('linkedId et mediaId sont requis');
         }

@@ -11,6 +11,7 @@ import {
 } from 'typeorm';
 import { Product } from '../../products/entities/product.entity';
 import slugify from 'slugify';
+import { MediaLink } from '../../media-links/entities/media-link.entity';
 
 @Entity()
 export class Category {
@@ -35,6 +36,9 @@ export class Category {
 
   @OneToMany(() => Product, (product) => product.category)
   products: Product[];
+
+  @OneToMany(() => MediaLink, (mediaLink) => mediaLink.category)
+  mediaLinks: MediaLink[];
 
   @BeforeInsert()
   @BeforeUpdate()

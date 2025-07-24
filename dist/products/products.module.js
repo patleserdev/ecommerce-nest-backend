@@ -14,6 +14,7 @@ const typeorm_1 = require("@nestjs/typeorm");
 const product_entity_1 = require("../products/entities/product.entity");
 const category_entity_1 = require("../categories/entities/category.entity");
 const brand_entity_1 = require("../brands/entities/brand.entity");
+const media_link_entity_1 = require("../media-links/entities/media-link.entity");
 let ProductsModule = class ProductsModule {
 };
 exports.ProductsModule = ProductsModule;
@@ -23,6 +24,7 @@ exports.ProductsModule = ProductsModule = __decorate([
             typeorm_1.TypeOrmModule.forFeature([product_entity_1.Product]),
             typeorm_1.TypeOrmModule.forFeature([category_entity_1.Category]),
             typeorm_1.TypeOrmModule.forFeature([brand_entity_1.Brand]),
+            typeorm_1.TypeOrmModule.forFeature([media_link_entity_1.MediaLink]),
         ],
         controllers: [products_controller_1.ProductsController],
         providers: [products_service_1.ProductsService],

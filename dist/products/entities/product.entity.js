@@ -15,6 +15,7 @@ const category_entity_1 = require("../../categories/entities/category.entity");
 const product_variation_entity_1 = require("../../product-variations/entities/product-variation.entity");
 const brand_entity_1 = require("../../brands/entities/brand.entity");
 const slugify_1 = require("slugify");
+const media_link_entity_1 = require("../../media-links/entities/media-link.entity");
 let Product = class Product {
     id;
     createdAt;
@@ -28,6 +29,7 @@ let Product = class Product {
     category;
     brand;
     variations;
+    mediaLinks;
     generateSlug() {
         if (this.name) {
             this.slug = (0, slugify_1.default)(this.name, { lower: true, strict: true });
@@ -86,6 +88,10 @@ __decorate([
     }),
     __metadata("design:type", Object)
 ], Product.prototype, "variations", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => media_link_entity_1.MediaLink, (mediaLink) => mediaLink.product),
+    __metadata("design:type", Array)
+], Product.prototype, "mediaLinks", void 0);
 __decorate([
     (0, typeorm_1.BeforeInsert)(),
     (0, typeorm_1.BeforeUpdate)(),

@@ -12,11 +12,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MediaLink = void 0;
 const typeorm_1 = require("typeorm");
 const media_entity_1 = require("../../medias/entities/media.entity");
+const product_entity_1 = require("../../products/entities/product.entity");
 let MediaLink = class MediaLink {
     id;
     mediaId;
     media;
     linkedType;
+    product;
     linkedId;
     role;
     position;
@@ -41,8 +43,13 @@ __decorate([
     __metadata("design:type", String)
 ], MediaLink.prototype, "linkedType", void 0);
 __decorate([
+    (0, typeorm_1.ManyToOne)(() => product_entity_1.Product, (product) => product.mediaLinks, { nullable: true }),
+    (0, typeorm_1.JoinColumn)({ name: 'linkedId' }),
+    __metadata("design:type", product_entity_1.Product)
+], MediaLink.prototype, "product", void 0);
+__decorate([
     (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
+    __metadata("design:type", Number)
 ], MediaLink.prototype, "linkedId", void 0);
 __decorate([
     (0, typeorm_1.Column)({ nullable: true }),

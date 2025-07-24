@@ -7,6 +7,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { Media } from '../../medias/entities/media.entity';
+import { Product } from 'src/products/entities/product.entity';
 
 @Entity()
 export class MediaLink {
@@ -23,8 +24,12 @@ export class MediaLink {
   @Column()
   linkedType: string; // ex: 'product', 'category', 'brand'
 
+  @ManyToOne(() => Product, (product) => product.mediaLinks, { nullable: true })
+  @JoinColumn({ name: 'linkedId' }) // facultatif si tu veux lier `linkedId`
+  product: Product;
+
   @Column()
-  linkedId: string; // ID de l'entité cible
+  linkedId: number; // ID de l'entité cible
 
   @Column({ nullable: true })
   role: string; // ex: 'thumbnail', 'banner', 'gallery'

@@ -6,8 +6,23 @@ import { Category } from '../categories/entities/category.entity';
 import { CreateProductDto } from '../products/dto/create-product.dto';
 import { UpdateProductDto } from '../products/dto/update-product.dto';
 import { Brand } from '../brands/entities/brand.entity';
-// import { CreateCategoryDto } from '../categories/dto/create-category.dto';
-// import { UpdateCategoryDto } from '../categories/dto/update-category.dto';
+import { MediaLink } from 'src/media-links/entities/media-link.entity';
+
+export interface MediaForProduct {
+  id: string;
+  url: string;
+  altText?: string;
+  description?: string;
+  title?: string;
+  role?: string;
+  position: number;
+  height?: number;
+  width?: number;
+}
+
+export interface ProductWithMedia extends Omit<Product, 'generateSlug'> {
+  medias: MediaForProduct[];
+}
 
 @Injectable()
 export class ProductsService {
@@ -18,6 +33,8 @@ export class ProductsService {
     private categoriesRepository: Repository<Category>,
     @InjectRepository(Brand)
     private brandsRepository: Repository<Category>,
+    @InjectRepository(MediaLink)
+    private mediaLinksRepository: Repository<MediaLink>,
   ) {}
 
   async createProduct(createProductDto: CreateProductDto): Promise<Product> {
@@ -48,6 +65,40 @@ export class ProductsService {
     return this.productsRepository.find({
       relations: ['category', 'variations', 'brand'],
     });
+  }
+
+  async findAllWithMedias() {
+    const products = await this.productsRepository.find(); // ou with relations
+
+    const allLinks = await this.mediaLinksRepository.find({
+      where: { linkedType: 'product' },
+      relations: ['media'],
+    });
+
+    const productMap = new Map<number, ProductWithMedia>();
+
+    for (const product of products) {
+      productMap.set(product.id, { ...product, medias: [] });
+    }
+
+    for (const link of allLinks) {
+      const product = productMap.get(link.linkedId);
+      if (product) {
+        product.medias.push({
+          id: link.media.id,
+          url: link.media.url,
+          altText: link.media.altText,
+          description: link.media.description,
+          title: link.media.title,
+          role: link.role,
+          position: link.position,
+          height: link.media.height,
+          width: link.media.width,
+        });
+      }
+    }
+
+    return Array.from(productMap.values());
   }
 
   async findProductById(id: number): Promise<Product> {

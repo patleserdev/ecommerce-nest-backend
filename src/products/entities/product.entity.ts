@@ -15,6 +15,7 @@ import { Category } from '../../categories/entities/category.entity';
 import { ProductVariation } from '../../product-variations/entities/product-variation.entity';
 import { Brand } from '../../brands/entities/brand.entity';
 import slugify from 'slugify';
+import { MediaLink } from 'src/media-links/entities/media-link.entity';
 
 @Entity()
 export class Product {
@@ -59,6 +60,9 @@ export class Product {
     cascade: true,
   })
   variations: Relation<ProductVariation[]>;
+
+  @OneToMany(() => MediaLink, (mediaLink) => mediaLink.product)
+  mediaLinks: MediaLink[];
 
   @BeforeInsert()
   @BeforeUpdate()

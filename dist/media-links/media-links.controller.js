@@ -14,6 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MediaLinksController = void 0;
 const common_1 = require("@nestjs/common");
+const common_2 = require("@nestjs/common");
 const media_links_service_1 = require("./media-links.service");
 const create_media_link_dto_1 = require("./dto/create-media-link.dto");
 const update_media_link_dto_1 = require("./dto/update-media-link.dto");
@@ -29,13 +30,17 @@ let MediaLinksController = class MediaLinksController {
         return this.mediaLinksService.findAll();
     }
     findOne(id) {
-        return this.mediaLinksService.findOne(+id);
+        return this.mediaLinksService.findOne(id);
     }
     update(id, updateMediaLinkDto) {
-        return this.mediaLinksService.update(+id, updateMediaLinkDto);
+        return this.mediaLinksService.update(id, updateMediaLinkDto);
     }
-    remove(id) {
-        return this.mediaLinksService.remove(+id);
+    async removeByLinkedAndMediaId(linkedId, mediaId) {
+        console.log('bonne route');
+        if (!linkedId || !mediaId) {
+            throw new common_2.NotFoundException('linkedId et mediaId sont requis');
+        }
+        return this.mediaLinksService.removeByLinkedIdAndMediaId(linkedId, mediaId);
     }
 };
 exports.MediaLinksController = MediaLinksController;
@@ -68,12 +73,13 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], MediaLinksController.prototype, "update", null);
 __decorate([
-    (0, common_1.Delete)(':id'),
-    __param(0, (0, common_1.Param)('id')),
+    (0, common_1.Delete)(),
+    __param(0, (0, common_1.Query)('linkedId')),
+    __param(1, (0, common_1.Query)('mediaId')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
-], MediaLinksController.prototype, "remove", null);
+    __metadata("design:paramtypes", [Number, String]),
+    __metadata("design:returntype", Promise)
+], MediaLinksController.prototype, "removeByLinkedAndMediaId", null);
 exports.MediaLinksController = MediaLinksController = __decorate([
     (0, common_1.Controller)('media-links'),
     __metadata("design:paramtypes", [media_links_service_1.MediaLinksService])

@@ -6,7 +6,7 @@ export declare class ProductsController {
     private readonly productsService;
     constructor(productsService: ProductsService);
     createProduct(createProductDto: CreateProductDto): Promise<Product>;
-    findAllProducts(): Promise<Product[]>;
+    findAllProducts(): Promise<import("./products.service").ProductWithMedia[]>;
     findProductById(id: number): Promise<Product>;
     findBySlug(slug: string): Promise<Product>;
     findProductBycategoryId(id: number): Promise<Product[]>;

@@ -28,7 +28,7 @@ let ProductsController = class ProductsController {
         return this.productsService.createProduct(createProductDto);
     }
     findAllProducts() {
-        return this.productsService.findAllProducts();
+        return this.productsService.findAllWithMedias();
     }
     findProductById(id) {
         return this.productsService.findProductById(id);

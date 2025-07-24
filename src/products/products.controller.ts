@@ -29,7 +29,7 @@ export class ProductsController {
   @Get()
   @ApiOperation({ summary: 'Récupérer tous les produits' })
   findAllProducts() {
-    return this.productsService.findAllProducts();
+    return this.productsService.findAllWithMedias();
   }
 
   @Get(':id')

@@ -17,10 +17,13 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const category_entity_1 = require("../categories/entities/category.entity");
+const media_link_entity_1 = require("../media-links/entities/media-link.entity");
 let CategoriesService = class CategoriesService {
     categoriesRepository;
-    constructor(categoriesRepository) {
+    mediaLinksRepository;
+    constructor(categoriesRepository, mediaLinksRepository) {
         this.categoriesRepository = categoriesRepository;
+        this.mediaLinksRepository = mediaLinksRepository;
     }
     async createCategory(createCategoryDto) {
         const category = this.categoriesRepository.create(createCategoryDto);
@@ -28,6 +31,36 @@ let CategoriesService = class CategoriesService {
     }
     async findAllCategories() {
         return this.categoriesRepository.find({ relations: ['products'] });
+    }
+    async findAllWithMedias() {
+        const categories = await this.categoriesRepository.find({
+            relations: ['products'],
+        });
+        const allLinks = await this.mediaLinksRepository.find({
+            where: { linkedType: 'category' },
+            relations: ['media'],
+        });
+        const categoryMap = new Map();
+        for (const category of categories) {
+            categoryMap.set(category.id, { ...category, medias: [] });
+        }
+        for (const link of allLinks) {
+            const category = categoryMap.get(link.linkedId);
+            if (category) {
+                category.medias.push({
+                    id: link.media.id,
+                    url: link.media.url,
+                    altText: link.media.altText,
+                    description: link.media.description,
+                    title: link.media.title,
+                    role: link.role,
+                    position: link.position,
+                    height: link.media.height,
+                    width: link.media.width,
+                });
+            }
+        }
+        return Array.from(categoryMap.values());
     }
     async findCategoryById(id) {
         const category = await this.categoriesRepository.findOne({
@@ -90,6 +123,8 @@ exports.CategoriesService = CategoriesService;
 exports.CategoriesService = CategoriesService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(category_entity_1.Category)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __param(1, (0, typeorm_1.InjectRepository)(media_link_entity_1.MediaLink)),
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        typeorm_2.Repository])
 ], CategoriesService);
 //# sourceMappingURL=categories.service.js.map

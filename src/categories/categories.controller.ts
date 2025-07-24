@@ -32,7 +32,7 @@ export class CategoriesController {
   @ApiOperation({ summary: 'Récupérer les catégories' })
   @ApiBody({ type: CreateCategoryDto })
   findAllCategories() {
-    return this.categoriesService.findAllCategories();
+    return this.categoriesService.findAllWithMedias();
   }
 
   @Get(':id')

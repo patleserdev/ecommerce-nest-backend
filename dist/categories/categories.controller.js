@@ -28,7 +28,7 @@ let CategoriesController = class CategoriesController {
         return this.categoriesService.createCategory(createCategoryDto);
     }
     findAllCategories() {
-        return this.categoriesService.findAllCategories();
+        return this.categoriesService.findAllWithMedias();
     }
     findCategoryById(id) {
         return this.categoriesService.findCategoryById(id);

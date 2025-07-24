@@ -5,7 +5,7 @@ export declare class CategoriesController {
     private readonly categoriesService;
     constructor(categoriesService: CategoriesService);
     createCategory(createCategoryDto: CreateCategoryDto): Promise<import("./entities/category.entity").Category>;
-    findAllCategories(): Promise<import("./entities/category.entity").Category[]>;
+    findAllCategories(): Promise<import("./categories.service").CategoryWithMedia[]>;
     findCategoryById(id: number): Promise<import("./entities/category.entity").Category>;
     findCategoryBySlug(slug: string, parentSlug?: string): Promise<import("./entities/category.entity").Category>;
     findCategoryByParent(id: number): Promise<import("./entities/category.entity").Category[]>;

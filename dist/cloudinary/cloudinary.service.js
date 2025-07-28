@@ -27,13 +27,13 @@ let CloudinaryService = class CloudinaryService {
         const width = metadata.width || 800;
         const height = metadata.height || 800;
         const isPng = metadata.format === 'png';
+        console.log('ispng', isPng);
         const processedBuffer = await sharp(buffer)[isPng ? 'png' : 'jpeg']()
             .toBuffer();
         return new Promise((resolve, reject) => {
             const uploadStream = cloudinary_1.v2.uploader.upload_stream({
                 folder: 'ecommerce',
                 resource_type: 'image',
-                format: isPng ? 'png' : 'jpg',
                 transformation: [
                     {
                         width,
@@ -44,7 +44,7 @@ let CloudinaryService = class CloudinaryService {
                 ],
             }, (error, result) => {
                 if (error)
-                    return reject(error);
+                    return reject(new Error(error.message || String(error.message)));
                 resolve({
                     publicId: result.public_id,
                     url: result.secure_url,
@@ -57,7 +57,7 @@ let CloudinaryService = class CloudinaryService {
         return new Promise((resolve, reject) => {
             cloudinary_1.v2.uploader.destroy(publicId, (error, result) => {
                 if (error)
-                    return reject(error);
+                    return reject(new Error(error || String(error)));
                 resolve(result);
             });
         });

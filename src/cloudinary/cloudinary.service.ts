@@ -19,7 +19,7 @@ export class CloudinaryService {
 
     // Détection du format
     const isPng = metadata.format === 'png';
-
+    console.log('ispng', isPng);
     // Conversion dans le bon format
     const processedBuffer = await sharp(buffer)
       [isPng ? 'png' : 'jpeg']()

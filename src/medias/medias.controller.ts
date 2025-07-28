@@ -118,8 +118,11 @@ export class MediasController {
       if (media.fileName != file.filename) {
         // si le filename est différent , je supprime l'image précédente dans cloudinary et je crée la nouvelle,
         await this.cloudinaryService.deleteFile(media.pictureId);
+        const originalMetadata = await sharp(file.buffer).metadata();
+        const isPng = originalMetadata.format === 'png';
         const resizedBuffer = await sharp(file.buffer)
-          .resize({ width: 5000, height: 5000, fit: 'inside' }) // ou une autre limite raisonnable
+          .resize({ width: 5000, height: 5000, fit: 'inside' })
+          [isPng ? 'png' : 'jpeg']()
           .toBuffer();
 
         const { publicId, url } =

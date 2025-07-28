@@ -41,7 +41,9 @@ export class CloudinaryService {
           ],
         },
         (error, result) => {
-          if (error) return reject(error);
+          if (error)
+            return reject(new Error(error.message || String(error.message)));
+
           resolve({
             publicId: result!.public_id,
             url: result!.secure_url,

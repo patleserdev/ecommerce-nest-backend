@@ -26,11 +26,14 @@ let CloudinaryService = class CloudinaryService {
         const metadata = await sharp(buffer).metadata();
         const width = metadata.width || 800;
         const height = metadata.height || 800;
-        console.log(metadata.size);
+        const isPng = metadata.format === 'png';
+        const processedBuffer = await sharp(buffer)[isPng ? 'png' : 'jpeg']()
+            .toBuffer();
         return new Promise((resolve, reject) => {
             const uploadStream = cloudinary_1.v2.uploader.upload_stream({
                 folder: 'ecommerce',
-                resource_type: 'auto',
+                resource_type: 'image',
+                format: isPng ? 'png' : 'jpg',
                 transformation: [
                     {
                         width,
@@ -47,7 +50,7 @@ let CloudinaryService = class CloudinaryService {
                     url: result.secure_url,
                 });
             });
-            stream_1.Readable.from(buffer).pipe(uploadStream);
+            stream_1.Readable.from(processedBuffer).pipe(uploadStream);
         });
     }
     async deleteFile(publicId) {

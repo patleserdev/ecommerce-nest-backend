@@ -44,9 +44,16 @@ export class MediasController {
     if (!file) throw new Error('File is required');
 
     // je réduis tout ce qui dépasse 25mpixels
+    // const resizedBuffer = await sharp(file.buffer)
+    //   .resize({ width: 3000, height: 3000, fit: 'inside' }) // ou une autre limite raisonnable
+    //   .jpeg({ quality: 80 })
+    //   .toBuffer();
+    const originalMetadata = await sharp(file.buffer).metadata();
+    const isPng = originalMetadata.format === 'png';
+    console.log(isPng);
     const resizedBuffer = await sharp(file.buffer)
-      .resize({ width: 3000, height: 3000, fit: 'inside' }) // ou une autre limite raisonnable
-      .jpeg({ quality: 80 })
+      .resize({ width: 3000, height: 3000, fit: 'inside' })
+      [isPng ? 'png' : 'jpeg']()
       .toBuffer();
 
     // console.log('metadatatest', metadatatest.size);
@@ -114,14 +121,15 @@ export class MediasController {
     // findone et comparaison =>
 
     if (file) {
-      console.log(media.fileName, file.filename);
+      //console.log(media.fileName, file.filename);
       if (media.fileName != file.filename) {
         // si le filename est différent , je supprime l'image précédente dans cloudinary et je crée la nouvelle,
         await this.cloudinaryService.deleteFile(media.pictureId);
         const originalMetadata = await sharp(file.buffer).metadata();
         const isPng = originalMetadata.format === 'png';
+        console.log(isPng);
         const resizedBuffer = await sharp(file.buffer)
-          .resize({ width: 5000, height: 5000, fit: 'inside' })
+          .resize({ width: 3000, height: 3000, fit: 'inside' })
           [isPng ? 'png' : 'jpeg']()
           .toBuffer();
 

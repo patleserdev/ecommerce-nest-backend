@@ -29,9 +29,11 @@ let MediasController = class MediasController {
     async create(file, body) {
         if (!file)
             throw new Error('File is required');
+        const originalMetadata = await sharp(file.buffer).metadata();
+        const isPng = originalMetadata.format === 'png';
+        console.log(isPng);
         const resizedBuffer = await sharp(file.buffer)
-            .resize({ width: 3000, height: 3000, fit: 'inside' })
-            .jpeg({ quality: 80 })
+            .resize({ width: 3000, height: 3000, fit: 'inside' })[isPng ? 'png' : 'jpeg']()
             .toBuffer();
         const { publicId, url } = await this.cloudinaryService.uploadFile(resizedBuffer);
         const metadata = await sharp(file.buffer).metadata();
@@ -65,11 +67,13 @@ let MediasController = class MediasController {
             ...body,
         };
         if (file) {
-            console.log(media.fileName, file.filename);
             if (media.fileName != file.filename) {
                 await this.cloudinaryService.deleteFile(media.pictureId);
+                const originalMetadata = await sharp(file.buffer).metadata();
+                const isPng = originalMetadata.format === 'png';
+                console.log(isPng);
                 const resizedBuffer = await sharp(file.buffer)
-                    .resize({ width: 5000, height: 5000, fit: 'inside' })
+                    .resize({ width: 3000, height: 3000, fit: 'inside' })[isPng ? 'png' : 'jpeg']()
                     .toBuffer();
                 const { publicId, url } = await this.cloudinaryService.uploadFile(resizedBuffer);
                 const metadata = await sharp(file.buffer).metadata();

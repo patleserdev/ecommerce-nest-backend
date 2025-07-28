@@ -17,20 +17,19 @@ export class CloudinaryService {
     const width = metadata.width || 800;
     const height = metadata.height || 800;
 
-    // 🔍 Détection du format d'entrée
+    // Détection du format
     const isPng = metadata.format === 'png';
 
-    // 🧠 Préparation du buffer selon le format
+    // Conversion dans le bon format
     const processedBuffer = await sharp(buffer)
-      [isPng ? 'png' : 'jpeg']() // appel dynamique : .png() ou .jpeg()
+      [isPng ? 'png' : 'jpeg']()
       .toBuffer();
 
     return new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
           folder: 'ecommerce',
-          resource_type: 'image', // image forcé pour éviter tout bug de détection
-          format: isPng ? 'png' : 'jpg', // force l'extension correcte dans Cloudinary
+          resource_type: 'image', // Cloudinary détecte automatiquement le type
           transformation: [
             {
               width,
@@ -58,7 +57,8 @@ export class CloudinaryService {
   async deleteFile(publicId: string): Promise<{ result: string }> {
     return new Promise((resolve, reject) => {
       cloudinary.uploader.destroy(publicId, (error, result) => {
-        if (error) return reject(error);
+        if (error) return reject(new Error(error || String(error)));
+
         resolve(result as { result: string });
       });
     });

@@ -12,21 +12,25 @@ export class CloudinaryService {
       api_secret: process.env.CLOUDINARY_API_SECRET,
     });
   }
-  async uploadFile(
-    // file: Express.Multer.File,
-    buffer: Buffer,
-  ): Promise<{ publicId: string; url: string }> {
-    // 🧠 Récupération des dimensions avec sharp
+  async uploadFile(buffer: Buffer): Promise<{ publicId: string; url: string }> {
     const metadata = await sharp(buffer).metadata();
     const width = metadata.width || 800;
     const height = metadata.height || 800;
-    console.log(metadata.size);
+
+    // 🔍 Détection du format d'entrée
+    const isPng = metadata.format === 'png';
+
+    // 🧠 Préparation du buffer selon le format
+    const processedBuffer = await sharp(buffer)
+      [isPng ? 'png' : 'jpeg']() // appel dynamique : .png() ou .jpeg()
+      .toBuffer();
 
     return new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
           folder: 'ecommerce',
-          resource_type: 'auto',
+          resource_type: 'image', // image forcé pour éviter tout bug de détection
+          format: isPng ? 'png' : 'jpg', // force l'extension correcte dans Cloudinary
           transformation: [
             {
               width,
@@ -45,11 +49,7 @@ export class CloudinaryService {
         },
       );
 
-      // const bufferStream = new Readable();
-      // bufferStream.push(file.buffer);
-      // bufferStream.push(null);
-      // bufferStream.pipe(uploadStream);
-      Readable.from(buffer).pipe(uploadStream);
+      Readable.from(processedBuffer).pipe(uploadStream);
     });
   }
 

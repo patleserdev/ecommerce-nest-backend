@@ -53,7 +53,11 @@ export class MediasController {
     console.log(isPng);
     const resizedBuffer = await sharp(file.buffer)
       .resize({ width: 3000, height: 3000, fit: 'inside' })
-      [isPng ? 'png' : 'jpeg']()
+      [isPng ? 'png' : 'jpeg']({
+        quality: 80, // pour jpeg, contrôle la qualité (0-100)
+        compressionLevel: 9, // pour png, compression (0-9)
+        // tu peux aussi ajouter d'autres options selon le format
+      })
       .toBuffer();
 
     // console.log('metadatatest', metadatatest.size);
@@ -115,13 +119,15 @@ export class MediasController {
     },
   ) {
     const media = await this.findOne(id);
+
     const mediaData = {
       ...body,
     };
     // findone et comparaison =>
-
+    console.log('body', body);
+    console.log('mediaData', mediaData);
     if (file) {
-      //console.log(media.fileName, file.filename);
+      console.log('media.fileName', media.fileName, 'fileName', file.filename);
       if (media.fileName != file.filename) {
         // si le filename est différent , je supprime l'image précédente dans cloudinary et je crée la nouvelle,
         await this.cloudinaryService.deleteFile(media.pictureId);

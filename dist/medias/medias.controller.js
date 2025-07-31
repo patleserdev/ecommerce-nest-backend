@@ -33,7 +33,10 @@ let MediasController = class MediasController {
         const isPng = originalMetadata.format === 'png';
         console.log(isPng);
         const resizedBuffer = await sharp(file.buffer)
-            .resize({ width: 3000, height: 3000, fit: 'inside' })[isPng ? 'png' : 'jpeg']()
+            .resize({ width: 3000, height: 3000, fit: 'inside' })[isPng ? 'png' : 'jpeg']({
+            quality: 80,
+            compressionLevel: 9,
+        })
             .toBuffer();
         const { publicId, url } = await this.cloudinaryService.uploadFile(resizedBuffer);
         const metadata = await sharp(file.buffer).metadata();
@@ -66,7 +69,10 @@ let MediasController = class MediasController {
         const mediaData = {
             ...body,
         };
+        console.log('body', body);
+        console.log('mediaData', mediaData);
         if (file) {
+            console.log('media.fileName', media.fileName, 'fileName', file.filename);
             if (media.fileName != file.filename) {
                 await this.cloudinaryService.deleteFile(media.pictureId);
                 const originalMetadata = await sharp(file.buffer).metadata();

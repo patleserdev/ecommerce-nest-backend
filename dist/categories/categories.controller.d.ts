@@ -7,7 +7,7 @@ export declare class CategoriesController {
     createCategory(createCategoryDto: CreateCategoryDto): Promise<import("./entities/category.entity").Category>;
     findAllCategories(): Promise<import("./categories.service").CategoryWithMedia[]>;
     findCategoryById(id: number): Promise<import("./entities/category.entity").Category>;
-    findCategoryBySlug(slug: string, parentSlug?: string): Promise<import("./entities/category.entity").Category>;
+    findCategoryBySlug(slug: string, parentSlug?: string): Promise<import("./categories.service").CategoryWithMedia>;
     findCategoryByParent(id: number): Promise<import("./entities/category.entity").Category[]>;
     updateCategory(id: number, updateCategoryDto: UpdateCategoryDto): Promise<import("./entities/category.entity").Category>;
     removeCategory(id: number): Promise<void>;

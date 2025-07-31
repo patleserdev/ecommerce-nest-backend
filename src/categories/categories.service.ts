@@ -1,12 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Category } from '../categories/entities/category.entity';
 import { CreateCategoryDto } from '../categories/dto/create-category.dto';
 import { UpdateCategoryDto } from '../categories/dto/update-category.dto';
 import { MediaLink } from '../media-links/entities/media-link.entity';
+import { Product } from 'src/products/entities/product.entity.js';
 
-export interface MediaForCategory {
+export interface MediaForProductOrCategoryOrBrand {
   id: string;
   url: string;
   altText?: string;
@@ -18,8 +19,14 @@ export interface MediaForCategory {
   width?: number;
 }
 
-export interface CategoryWithMedia extends Omit<Category, 'generateSlug'> {
-  medias: MediaForCategory[];
+export interface CategoryWithMedia
+  extends Omit<Category, 'generateSlug' | 'products'> {
+  medias: MediaForProductOrCategoryOrBrand[];
+  products: ProductWithMedia[];
+}
+
+export interface ProductWithMedia extends Omit<Product, 'generateSlug'> {
+  medias: MediaForProductOrCategoryOrBrand[];
 }
 
 @Injectable()
@@ -44,39 +51,18 @@ export class CategoriesService {
     return this.categoriesRepository.find({ relations: ['products'] });
   }
 
-  async findAllWithMedias() {
+  async findAllWithMedias(): Promise<CategoryWithMedia[]> {
     const categories = await this.categoriesRepository.find({
       relations: ['products'],
-    }); // ou with relations
-
-    const allLinks = await this.mediaLinksRepository.find({
-      where: { linkedType: 'category' },
-      relations: ['media'],
     });
 
-    const categoryMap = new Map<number, CategoryWithMedia>();
+    const categoriesWithMedias = await Promise.all(
+      categories.map((category) =>
+        this.addMediasToCategoryWithProducts(category),
+      ),
+    );
 
-    for (const category of categories) {
-      categoryMap.set(category.id, { ...category, medias: [] });
-    }
-
-    for (const link of allLinks) {
-      const category = categoryMap.get(link.linkedId);
-      if (category) {
-        category.medias.push({
-          id: link.media.id,
-          url: link.media.url,
-          altText: link.media.altText,
-          description: link.media.description,
-          title: link.media.title,
-          role: link.role,
-          position: link.position,
-          height: link.media.height,
-          width: link.media.width,
-        });
-      }
-    }
-    return Array.from(categoryMap.values());
+    return categoriesWithMedias;
   }
 
   async findCategoryById(id: number): Promise<Category> {
@@ -92,7 +78,7 @@ export class CategoriesService {
   async findCategoryBySlug(
     slug: string,
     parentSlug?: string,
-  ): Promise<Category> {
+  ): Promise<CategoryWithMedia> {
     if (parentSlug) {
       const parentCategory = await this.categoriesRepository.findOne({
         where: { slug: parentSlug },
@@ -111,7 +97,7 @@ export class CategoriesService {
         throw new NotFoundException('Category not found with specified parent');
       }
 
-      return category;
+      return this.addMediasToCategoryWithProducts(category);
     } else {
       const category = await this.categoriesRepository.findOne({
         where: { slug: slug },
@@ -122,7 +108,7 @@ export class CategoriesService {
         throw new NotFoundException('Category not found without parent');
       }
 
-      return category;
+      return this.addMediasToCategoryWithProducts(category);
     }
   }
 
@@ -149,5 +135,102 @@ export class CategoriesService {
   async removeCategory(id: number): Promise<void> {
     const category = await this.findCategoryById(id);
     await this.categoriesRepository.remove(category);
+  }
+
+  // private async addMediasToCategory(
+  //   category: Category,
+  // ): Promise<CategoryWithMedia> {
+  //   const mediaLinks = await this.mediaLinksRepository.find({
+  //     where: {
+  //       linkedType: 'category',
+  //       linkedId: category.id,
+  //     },
+  //     relations: ['media'],
+  //   });
+
+  //   const medias = mediaLinks.map((link) => ({
+  //     id: link.media.id,
+  //     url: link.media.url,
+  //     altText: link.media.altText,
+  //     description: link.media.description,
+  //     title: link.media.title,
+  //     role: link.role,
+  //     position: link.position,
+  //     height: link.media.height,
+  //     width: link.media.width,
+  //   }));
+
+  //   return {
+  //     ...category,
+  //     medias,
+  //   };
+  // }
+
+  private async addMediasToCategoryWithProducts(
+    category: Category,
+  ): Promise<CategoryWithMedia> {
+    const [categoryMediaLinks, productMediaLinks] = await Promise.all([
+      this.mediaLinksRepository.find({
+        where: {
+          linkedType: 'category',
+          linkedId: category.id,
+        },
+        relations: ['media'],
+      }),
+      this.mediaLinksRepository.find({
+        where: {
+          linkedType: 'product',
+          linkedId: In(category.products.map((p) => p.id)),
+        },
+        relations: ['media'],
+      }),
+    ]);
+
+    // Medias de la catégorie
+    const categoryMedias = categoryMediaLinks.map((link) => ({
+      id: link.media.id,
+      url: link.media.url,
+      altText: link.media.altText,
+      description: link.media.description,
+      title: link.media.title,
+      role: link.role,
+      position: link.position,
+      height: link.media.height,
+      width: link.media.width,
+    }));
+
+    // Création d'une map produitId => medias
+    const productMediaMap = new Map<number, any[]>();
+    for (const link of productMediaLinks) {
+      if (!productMediaMap.has(link.linkedId)) {
+        productMediaMap.set(link.linkedId, []);
+      }
+
+      productMediaMap.get(link.linkedId)!.push({
+        id: link.media.id,
+        url: link.media.url,
+        altText: link.media.altText,
+        description: link.media.description,
+        title: link.media.title,
+        role: link.role,
+        position: link.position,
+        height: link.media.height,
+        width: link.media.width,
+      });
+    }
+
+    // Ajouter les médias à chaque produit
+    const enrichedProducts: ProductWithMedia[] = category.products.map(
+      (product) => ({
+        ...product,
+        medias: productMediaMap.get(product.id) ?? [],
+      }),
+    );
+
+    return {
+      ...category,
+      medias: categoryMedias,
+      products: enrichedProducts,
+    };
   }
 }

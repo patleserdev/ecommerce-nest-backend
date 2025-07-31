@@ -36,31 +36,8 @@ let CategoriesService = class CategoriesService {
         const categories = await this.categoriesRepository.find({
             relations: ['products'],
         });
-        const allLinks = await this.mediaLinksRepository.find({
-            where: { linkedType: 'category' },
-            relations: ['media'],
-        });
-        const categoryMap = new Map();
-        for (const category of categories) {
-            categoryMap.set(category.id, { ...category, medias: [] });
-        }
-        for (const link of allLinks) {
-            const category = categoryMap.get(link.linkedId);
-            if (category) {
-                category.medias.push({
-                    id: link.media.id,
-                    url: link.media.url,
-                    altText: link.media.altText,
-                    description: link.media.description,
-                    title: link.media.title,
-                    role: link.role,
-                    position: link.position,
-                    height: link.media.height,
-                    width: link.media.width,
-                });
-            }
-        }
-        return Array.from(categoryMap.values());
+        const categoriesWithMedias = await Promise.all(categories.map((category) => this.addMediasToCategoryWithProducts(category)));
+        return categoriesWithMedias;
     }
     async findCategoryById(id) {
         const category = await this.categoriesRepository.findOne({
@@ -86,7 +63,7 @@ let CategoriesService = class CategoriesService {
             if (!category) {
                 throw new common_1.NotFoundException('Category not found with specified parent');
             }
-            return category;
+            return this.addMediasToCategoryWithProducts(category);
         }
         else {
             const category = await this.categoriesRepository.findOne({
@@ -96,7 +73,7 @@ let CategoriesService = class CategoriesService {
             if (!category) {
                 throw new common_1.NotFoundException('Category not found without parent');
             }
-            return category;
+            return this.addMediasToCategoryWithProducts(category);
         }
     }
     async findCategoryByParent(id) {
@@ -117,6 +94,61 @@ let CategoriesService = class CategoriesService {
     async removeCategory(id) {
         const category = await this.findCategoryById(id);
         await this.categoriesRepository.remove(category);
+    }
+    async addMediasToCategoryWithProducts(category) {
+        const [categoryMediaLinks, productMediaLinks] = await Promise.all([
+            this.mediaLinksRepository.find({
+                where: {
+                    linkedType: 'category',
+                    linkedId: category.id,
+                },
+                relations: ['media'],
+            }),
+            this.mediaLinksRepository.find({
+                where: {
+                    linkedType: 'product',
+                    linkedId: (0, typeorm_2.In)(category.products.map((p) => p.id)),
+                },
+                relations: ['media'],
+            }),
+        ]);
+        const categoryMedias = categoryMediaLinks.map((link) => ({
+            id: link.media.id,
+            url: link.media.url,
+            altText: link.media.altText,
+            description: link.media.description,
+            title: link.media.title,
+            role: link.role,
+            position: link.position,
+            height: link.media.height,
+            width: link.media.width,
+        }));
+        const productMediaMap = new Map();
+        for (const link of productMediaLinks) {
+            if (!productMediaMap.has(link.linkedId)) {
+                productMediaMap.set(link.linkedId, []);
+            }
+            productMediaMap.get(link.linkedId).push({
+                id: link.media.id,
+                url: link.media.url,
+                altText: link.media.altText,
+                description: link.media.description,
+                title: link.media.title,
+                role: link.role,
+                position: link.position,
+                height: link.media.height,
+                width: link.media.width,
+            });
+        }
+        const enrichedProducts = category.products.map((product) => ({
+            ...product,
+            medias: productMediaMap.get(product.id) ?? [],
+        }));
+        return {
+            ...category,
+            medias: categoryMedias,
+            products: enrichedProducts,
+        };
     }
 };
 exports.CategoriesService = CategoriesService;
